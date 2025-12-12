@@ -1,0 +1,42 @@
+/* ===================================
+   Base Styles - Container & Header
+   =================================== */
+
+/* Activity Graph Container */
+.activity-graph-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.activity-graph {
+    min-width: fit-content;
+}
+
+.activity-graph-header {
+    margin-bottom: 20px;
+}
+
+.activity-graph-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+/* Scrollbar styling */
+.activity-graph-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.activity-graph-container::-webkit-scrollbar-track {
+    background: var(--background-primary);
+}
+
+.activity-graph-container::-webkit-scrollbar-thumb {
+    background: var(--background-modifier-border);
+    border-radius: 4px;
+}
+
+.activity-graph-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}

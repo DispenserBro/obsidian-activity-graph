@@ -1,0 +1,93 @@
+/* ===================================
+   Settings Panel Styles
+   =================================== */
+
+/* Settings Styles */
+.activity-graph-settings h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+/* Collapsible Colors Section */
+.activity-colors-section {
+    margin-top: 20px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 0;
+}
+
+.activity-colors-header {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal);
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.activity-colors-header:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.activity-colors-section[open] .activity-colors-header {
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.activity-colors-section[open] {
+    padding-bottom: 10px;
+}
+
+.activity-colors-section .setting-item {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.activity-colors-subheader {
+    margin-top: 15px !important;
+    margin-bottom: 8px !important;
+    margin-left: 16px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+}
+
+.setting-item-description {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* Date input styling */
+input.activity-date-input {
+    font-family: var(--font-monospace);
+    width: 150px;
+    padding: 6px 10px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background-color: var(--background-primary);
+    color: var(--text-normal);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+input.activity-date-input:hover {
+    border-color: var(--interactive-accent);
+}
+
+input.activity-date-input:focus {
+    outline: none;
+    border-color: var(--interactive-accent);
+    box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
+}
+
+/* Dark theme adjustments for date picker */
+.theme-dark input.activity-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

@@ -1,0 +1,12 @@
+{
+  "periodType": "3months",
+  "customStartDate": "2025-11-12",
+  "customEndDate": "2025-12-12",
+  "displayOnlyTasks": true,
+  "displayStyle": "calendar",
+  "highlightToday": true,
+  "highlightColor": "#7c3aed",
+  "activityData": {
+    "2025-12-12": 10
+  }
+}

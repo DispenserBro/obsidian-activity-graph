@@ -1,0 +1,34 @@
+/* ===================================
+   Legend & Tooltip Styles
+   =================================== */
+
+/* Legend */
+.graph-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 15px;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.legend-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 0 4px;
+}
+
+/* Tooltip */
+.activity-tooltip {
+    position: fixed;
+    background: var(--background-secondary);
+    color: var(--text-normal);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--background-modifier-border);
+    white-space: nowrap;
+}

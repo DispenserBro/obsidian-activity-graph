@@ -1,0 +1,129 @@
+/* ===================================
+   Commit Graph Styles
+   =================================== */
+
+/* Graph Months */
+.graph-months {
+    display: flex;
+    margin-bottom: 5px;
+    padding-left: 45px;
+    position: relative;
+    height: 16px;
+}
+
+.month-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    position: absolute;
+    white-space: nowrap;
+}
+
+/* Graph Wrapper */
+.graph-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+/* Day Labels */
+.graph-days {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: space-around;
+    padding-right: 8px;
+    flex-shrink: 0;
+}
+
+.day-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    height: 12px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+}
+
+/* Weeks Container */
+.graph-weeks {
+    display: flex;
+    gap: 3px;
+}
+
+.graph-week {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Graph Squares */
+.graph-square {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.graph-square:hover {
+    outline: 2px solid var(--text-muted);
+    outline-offset: 0;
+    transform: scale(1.1);
+}
+
+.graph-square:active {
+    transform: scale(0.95);
+}
+
+/* Today Highlight - Commit Graph */
+.graph-square.today {
+    outline: 2px solid;
+    outline-offset: 0;
+}
+
+.graph-square.today:hover {
+    outline: 2px solid;
+    outline-offset: 0;
+    transform: scale(1.1);
+}
+
+/* Activity Levels - Light Theme */
+.theme-light .graph-square.level-0 {
+    background-color: var(--activity-light-level-0, #ebedf0);
+}
+
+.theme-light .graph-square.level-1 {
+    background-color: var(--activity-light-level-1, #9be9a8);
+}
+
+.theme-light .graph-square.level-2 {
+    background-color: var(--activity-light-level-2, #40c463);
+}
+
+.theme-light .graph-square.level-3 {
+    background-color: var(--activity-light-level-3, #30a14e);
+}
+
+.theme-light .graph-square.level-4 {
+    background-color: var(--activity-light-level-4, #216e39);
+}
+
+/* Activity Levels - Dark Theme */
+.theme-dark .graph-square.level-0 {
+    background-color: var(--activity-dark-level-0, #161b22);
+}
+
+.theme-dark .graph-square.level-1 {
+    background-color: var(--activity-dark-level-1, #0e4429);
+}
+
+.theme-dark .graph-square.level-2 {
+    background-color: var(--activity-dark-level-2, #006d32);
+}
+
+.theme-dark .graph-square.level-3 {
+    background-color: var(--activity-dark-level-3, #26a641);
+}
+
+.theme-dark .graph-square.level-4 {
+    background-color: var(--activity-dark-level-4, #39d353);
+}
