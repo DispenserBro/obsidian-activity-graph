@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS = {
     displayStyle: 'commitGraph',
     highlightToday: true,
     highlightColor: '#7c3aed',
+    firstDayOfWeek: 0, // 0 = Sunday, 1 = Monday
     // Activity level colors - Light theme
     lightLevel0: '#ebedf0',
     lightLevel1: '#9be9a8',

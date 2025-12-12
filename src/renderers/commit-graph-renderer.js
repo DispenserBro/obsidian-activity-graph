@@ -3,33 +3,42 @@
  */
 import { BaseRenderer } from './base-renderer.js';
 import { formatDate, getActivityLevel } from '../utils.js';
-import { MONTH_NAMES_SHORT, DAY_LABELS, SQUARE_SIZE, GAP } from '../constants.js';
+import { SQUARE_SIZE, GAP } from '../constants.js';
+import { getMonthShort, getDayLabels } from '../localization.js';
 
 export class CommitGraphRenderer extends BaseRenderer {
     render(container, activityData, startDate, endDate) {
-        const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        const firstDayOfWeek = this.getFirstDayOfWeek();
+        
+        // Calculate adjusted start date to align with first day of week
+        const adjustedStart = new Date(startDate);
+        const startDayOfWeek = adjustedStart.getDay();
+        const daysToSubtract = (startDayOfWeek - firstDayOfWeek + 7) % 7;
+        adjustedStart.setDate(adjustedStart.getDate() - daysToSubtract);
+        
+        const daysDiff = Math.ceil((endDate - adjustedStart) / (1000 * 60 * 60 * 24));
         const weeks = Math.ceil(daysDiff / 7);
         const weekWidth = SQUARE_SIZE + GAP;
         
-        this.renderMonthLabels(container, startDate, endDate, weeks, weekWidth);
+        this.renderMonthLabels(container, adjustedStart, endDate, weeks, weekWidth);
         
         const graphWrapper = container.createEl('div', { cls: 'graph-wrapper' });
         this.renderDayLabels(graphWrapper);
         
         const weeksContainer = graphWrapper.createEl('div', { cls: 'graph-weeks' });
-        this.renderWeeks(weeksContainer, activityData, startDate, endDate, weeks);
+        this.renderWeeks(weeksContainer, activityData, adjustedStart, startDate, endDate, weeks);
         
         this.renderLegend(container);
     }
 
-    renderMonthLabels(container, startDate, endDate, weeks, weekWidth) {
+    renderMonthLabels(container, adjustedStart, endDate, weeks, weekWidth) {
         const monthLabels = container.createEl('div', { cls: 'graph-months' });
         
-        let currentMonth = startDate.getMonth();
-        let currentYear = startDate.getFullYear();
+        let currentMonth = adjustedStart.getMonth();
+        let currentYear = adjustedStart.getFullYear();
         
         for (let week = 0; week < weeks; week++) {
-            const date = new Date(startDate);
+            const date = new Date(adjustedStart);
             date.setDate(date.getDate() + (week * 7));
             
             if (date > endDate) break;
@@ -39,7 +48,7 @@ export class CommitGraphRenderer extends BaseRenderer {
             
             if (week === 0 || dateMonth !== currentMonth || dateYear !== currentYear) {
                 const monthLabel = monthLabels.createEl('span', { 
-                    text: MONTH_NAMES_SHORT[dateMonth],
+                    text: getMonthShort(dateMonth),
                     cls: 'month-label'
                 });
                 monthLabel.style.left = (week * weekWidth) + 'px';
@@ -52,20 +61,38 @@ export class CommitGraphRenderer extends BaseRenderer {
 
     renderDayLabels(graphWrapper) {
         const dayLabels = graphWrapper.createEl('div', { cls: 'graph-days' });
-        DAY_LABELS.forEach(day => {
-            dayLabels.createEl('span', { text: day, cls: 'day-label' });
-        });
+        const firstDay = this.getFirstDayOfWeek();
+        const labels = getDayLabels(firstDay);
+        
+        // Sunday start: labels at positions 1, 3, 5 (Mon, Wed, Fri)
+        // Monday start: labels at positions 0, 2, 4 (Mon, Wed, Fri)
+        const startOffset = firstDay === 0 ? 1 : 0;
+        
+        for (let i = 0; i < 7; i++) {
+            const adjustedIndex = i - startOffset;
+            if (adjustedIndex >= 0 && adjustedIndex % 2 === 0 && adjustedIndex / 2 < labels.length) {
+                dayLabels.createEl('span', { text: labels[adjustedIndex / 2], cls: 'day-label' });
+            } else {
+                dayLabels.createEl('span', { text: '', cls: 'day-label' });
+            }
+        }
     }
 
-    renderWeeks(weeksContainer, activityData, startDate, endDate, weeks) {
+    renderWeeks(weeksContainer, activityData, adjustedStart, originalStart, endDate, weeks) {
         for (let week = 0; week < weeks; week++) {
             const weekCol = weeksContainer.createEl('div', { cls: 'graph-week' });
             
             for (let day = 0; day < 7; day++) {
-                const date = new Date(startDate);
+                const date = new Date(adjustedStart);
                 date.setDate(date.getDate() + (week * 7) + day);
                 
                 if (date > endDate) continue;
+                
+                if (date < originalStart) {
+                    // Create empty placeholder for dates before original start
+                    weekCol.createEl('div', { cls: 'graph-square empty' });
+                    continue;
+                }
                 
                 const dateStr = formatDate(date);
                 const count = activityData[dateStr] || 0;

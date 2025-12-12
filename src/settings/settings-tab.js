@@ -2,6 +2,7 @@
  * Settings Tab - Plugin configuration UI
  */
 import { PluginSettingTab, Setting } from 'obsidian';
+import { t } from '../localization.js';
 
 export class ActivityGraphSettingTab extends PluginSettingTab {
     constructor(app, plugin) {
@@ -13,12 +14,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: 'Activity Graph Settings' });
+        containerEl.createEl('h2', { text: t('settingsTitle') });
 
         // Highlight Today Setting
         new Setting(containerEl)
-            .setName('Highlight Today')
-            .setDesc('Add a visual highlight to the current day on the graph')
+            .setName(t('settingHighlightToday'))
+            .setDesc(t('settingHighlightTodayDesc'))
             .addToggle(toggle => toggle
                 .setValue(this.plugin.settings.highlightToday)
                 .onChange(async (value) => {
@@ -31,8 +32,8 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         // Highlight Color Setting (only shown when highlightToday is enabled)
         if (this.plugin.settings.highlightToday) {
             const colorSetting = new Setting(containerEl)
-                .setName('Highlight Color')
-                .setDesc('Choose the color for the today highlight');
+                .setName(t('settingHighlightColor'))
+                .setDesc(t('settingHighlightColorDesc'));
             
             const colorInput = colorSetting.controlEl.createEl('input', {
                 type: 'color',
@@ -48,8 +49,8 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
 
         // Display Only Tasks Setting
         new Setting(containerEl)
-            .setName('Display only Tasks')
-            .setDesc('Show completed tasks instead of file activity. Uses Tasks plugin format (✅ YYYY-MM-DD or done:: YYYY-MM-DD)')
+            .setName(t('settingDisplayOnlyTasks'))
+            .setDesc(t('settingDisplayOnlyTasksDesc'))
             .addToggle(toggle => toggle
                 .setValue(this.plugin.settings.displayOnlyTasks)
                 .onChange(async (value) => {
@@ -60,11 +61,11 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
 
         // Display Style Setting
         new Setting(containerEl)
-            .setName('Display Style')
-            .setDesc('Choose how to display the activity graph')
+            .setName(t('settingDisplayStyle'))
+            .setDesc(t('settingDisplayStyleDesc'))
             .addDropdown(dropdown => dropdown
-                .addOption('commitGraph', 'Commit Graph')
-                .addOption('calendar', 'Calendar')
+                .addOption('commitGraph', t('styleCommitGraph'))
+                .addOption('calendar', t('styleCalendar'))
                 .setValue(this.plugin.settings.displayStyle)
                 .onChange(async (value) => {
                     this.plugin.settings.displayStyle = value;
@@ -72,16 +73,30 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     this.plugin.updateView();
                 }));
 
+        // First Day of Week Setting
+        new Setting(containerEl)
+            .setName(t('settingFirstDayOfWeek'))
+            .setDesc(t('settingFirstDayOfWeekDesc'))
+            .addDropdown(dropdown => dropdown
+                .addOption('0', t('firstDaySunday'))
+                .addOption('1', t('firstDayMonday'))
+                .setValue(String(this.plugin.settings.firstDayOfWeek))
+                .onChange(async (value) => {
+                    this.plugin.settings.firstDayOfWeek = parseInt(value);
+                    await this.plugin.saveSettings();
+                    this.plugin.updateView();
+                }));
+
         // Period Type Setting
         new Setting(containerEl)
-            .setName('Display Period')
-            .setDesc('Choose the time period to display in the activity graph')
+            .setName(t('settingDisplayPeriod'))
+            .setDesc(t('settingDisplayPeriodDesc'))
             .addDropdown(dropdown => dropdown
-                .addOption('1month', '1 Month')
-                .addOption('3months', '3 Months')
-                .addOption('6months', '6 Months')
-                .addOption('12months', '12 Months')
-                .addOption('custom', 'Custom Period')
+                .addOption('1month', t('period1Month'))
+                .addOption('3months', t('period3Months'))
+                .addOption('6months', t('period6Months'))
+                .addOption('12months', t('period12Months'))
+                .addOption('custom', t('periodCustom'))
                 .setValue(this.plugin.settings.periodType)
                 .onChange(async (value) => {
                     this.plugin.settings.periodType = value;
@@ -92,11 +107,11 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
 
         // Custom Date Fields
         if (this.plugin.settings.periodType === 'custom') {
-            containerEl.createEl('h3', { text: 'Custom Date Range' });
+            containerEl.createEl('h3', { text: t('settingCustomDateRange') });
 
             const startDateSetting = new Setting(containerEl)
-                .setName('Start Date')
-                .setDesc('Select the start date for the custom period');
+                .setName(t('settingStartDate'))
+                .setDesc(t('settingStartDateDesc'));
             
             const startDateInput = startDateSetting.controlEl.createEl('input', {
                 type: 'date',
@@ -110,8 +125,8 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
             });
 
             const endDateSetting = new Setting(containerEl)
-                .setName('End Date')
-                .setDesc('Select the end date for the custom period');
+                .setName(t('settingEndDate'))
+                .setDesc(t('settingEndDateDesc'));
             
             const endDateInput = endDateSetting.controlEl.createEl('input', {
                 type: 'date',
@@ -128,30 +143,30 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         // Activity Colors Section - Collapsible
         const colorsSection = containerEl.createEl('details', { cls: 'activity-colors-section' });
         const colorsSummary = colorsSection.createEl('summary', { cls: 'activity-colors-header' });
-        colorsSummary.createEl('span', { text: 'Activity Level Colors' });
+        colorsSummary.createEl('span', { text: t('settingActivityColors') });
 
         // Light Theme Colors
-        colorsSection.createEl('h4', { text: 'Light Theme', cls: 'activity-colors-subheader' });
-        this.renderColorSetting(colorsSection, 'Level 0 (No activity)', 'lightLevel0');
-        this.renderColorSetting(colorsSection, 'Level 1 (Low)', 'lightLevel1');
-        this.renderColorSetting(colorsSection, 'Level 2 (Medium)', 'lightLevel2');
-        this.renderColorSetting(colorsSection, 'Level 3 (High)', 'lightLevel3');
-        this.renderColorSetting(colorsSection, 'Level 4 (Very High)', 'lightLevel4');
+        colorsSection.createEl('h4', { text: t('settingLightTheme'), cls: 'activity-colors-subheader' });
+        this.renderColorSetting(colorsSection, t('settingLevel0'), 'lightLevel0');
+        this.renderColorSetting(colorsSection, t('settingLevel1'), 'lightLevel1');
+        this.renderColorSetting(colorsSection, t('settingLevel2'), 'lightLevel2');
+        this.renderColorSetting(colorsSection, t('settingLevel3'), 'lightLevel3');
+        this.renderColorSetting(colorsSection, t('settingLevel4'), 'lightLevel4');
 
         // Dark Theme Colors
-        colorsSection.createEl('h4', { text: 'Dark Theme', cls: 'activity-colors-subheader' });
-        this.renderColorSetting(colorsSection, 'Level 0 (No activity)', 'darkLevel0');
-        this.renderColorSetting(colorsSection, 'Level 1 (Low)', 'darkLevel1');
-        this.renderColorSetting(colorsSection, 'Level 2 (Medium)', 'darkLevel2');
-        this.renderColorSetting(colorsSection, 'Level 3 (High)', 'darkLevel3');
-        this.renderColorSetting(colorsSection, 'Level 4 (Very High)', 'darkLevel4');
+        colorsSection.createEl('h4', { text: t('settingDarkTheme'), cls: 'activity-colors-subheader' });
+        this.renderColorSetting(colorsSection, t('settingLevel0'), 'darkLevel0');
+        this.renderColorSetting(colorsSection, t('settingLevel1'), 'darkLevel1');
+        this.renderColorSetting(colorsSection, t('settingLevel2'), 'darkLevel2');
+        this.renderColorSetting(colorsSection, t('settingLevel3'), 'darkLevel3');
+        this.renderColorSetting(colorsSection, t('settingLevel4'), 'darkLevel4');
 
         // Reset Colors Button
         new Setting(colorsSection)
-            .setName('Reset Colors')
-            .setDesc('Reset all activity colors to default values')
+            .setName(t('settingResetColors'))
+            .setDesc(t('settingResetColorsDesc'))
             .addButton(button => button
-                .setButtonText('Reset')
+                .setButtonText(t('settingResetButton'))
                 .onClick(async () => {
                     this.plugin.settings.lightLevel0 = '#ebedf0';
                     this.plugin.settings.lightLevel1 = '#9be9a8';

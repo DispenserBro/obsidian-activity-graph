@@ -2,11 +2,13 @@
  * Base Renderer - Common functionality for graph renderers
  */
 import { formatDate } from '../utils.js';
+import { t } from '../localization.js';
 
 export class BaseRenderer {
-    constructor(plugin = null) {
+    constructor(plugin = null, customSettings = null) {
         this.currentTooltip = null;
         this.plugin = plugin;
+        this.customSettings = customSettings;
         this.todayStr = formatDate(new Date());
     }
 
@@ -14,22 +16,37 @@ export class BaseRenderer {
         this.plugin = plugin;
     }
 
+    setCustomSettings(settings) {
+        this.customSettings = settings;
+    }
+
+    getSettings() {
+        return this.customSettings || (this.plugin && this.plugin.settings) || {};
+    }
+
     isToday(dateStr) {
         return dateStr === this.todayStr;
     }
 
     shouldHighlightToday() {
-        return this.plugin && this.plugin.settings && this.plugin.settings.highlightToday;
+        const settings = this.getSettings();
+        return settings.highlightToday !== undefined ? settings.highlightToday : false;
     }
 
     getHighlightColor() {
-        return this.plugin?.settings?.highlightColor || '#7c3aed';
+        const settings = this.getSettings();
+        return settings.highlightColor || '#7c3aed';
+    }
+
+    getFirstDayOfWeek() {
+        const settings = this.getSettings();
+        return settings.firstDayOfWeek !== undefined ? settings.firstDayOfWeek : 0;
     }
 
     showTooltip(element, date, count) {
         const tooltip = document.createElement('div');
         tooltip.addClass('activity-tooltip');
-        tooltip.textContent = `${count} activities on ${date}`;
+        tooltip.textContent = `${count} ${t('tooltipActivities')} ${date}`;
         
         const rect = element.getBoundingClientRect();
         tooltip.style.left = rect.left + 'px';
@@ -49,11 +66,11 @@ export class BaseRenderer {
     renderLegend(container, additionalClass = '') {
         const cls = additionalClass ? `graph-legend ${additionalClass}` : 'graph-legend';
         const legend = container.createEl('div', { cls });
-        legend.createEl('span', { text: 'Less', cls: 'legend-text' });
+        legend.createEl('span', { text: t('legendLess'), cls: 'legend-text' });
         for (let i = 0; i <= 4; i++) {
             legend.createEl('div', { cls: `graph-square level-${i}` });
         }
-        legend.createEl('span', { text: 'More', cls: 'legend-text' });
+        legend.createEl('span', { text: t('legendMore'), cls: 'legend-text' });
     }
 
     addTooltipListeners(element, dateStr, count) {

@@ -1,12 +1,23 @@
 {
-  "periodType": "3months",
+  "periodType": "12months",
   "customStartDate": "2025-11-12",
   "customEndDate": "2025-12-12",
   "displayOnlyTasks": true,
-  "displayStyle": "calendar",
+  "displayStyle": "commitGraph",
   "highlightToday": true,
   "highlightColor": "#7c3aed",
+  "firstDayOfWeek": 1,
+  "lightLevel0": "#ebedf0",
+  "lightLevel1": "#9be9a8",
+  "lightLevel2": "#40c463",
+  "lightLevel3": "#30a14e",
+  "lightLevel4": "#216e39",
+  "darkLevel0": "#161b22",
+  "darkLevel1": "#0e4429",
+  "darkLevel2": "#006d32",
+  "darkLevel3": "#26a641",
+  "darkLevel4": "#39d353",
   "activityData": {
-    "2025-12-12": 10
+    "2025-12-12": 95
   }
 }

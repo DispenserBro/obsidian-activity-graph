@@ -1,30 +1,86 @@
 /**
- * Calendar Renderer - Monthly calendar view
+ * Calendar Renderer - Monthly calendar view with optional navigation
  */
 import { BaseRenderer } from './base-renderer.js';
 import { formatDate, getActivityLevel, getMonthsInRange } from '../utils.js';
-import { MONTH_NAMES_FULL, DAY_NAMES_SHORT } from '../constants.js';
+import { getMonthFull, getDaysShort, t } from '../localization.js';
 
 export class CalendarRenderer extends BaseRenderer {
+    constructor(plugin = null, customSettings = null, compactMode = false) {
+        super(plugin, customSettings);
+        this.compactMode = compactMode; // true = single month with navigation, false = all months
+    }
+
     render(container, activityData, startDate, endDate) {
-        const months = getMonthsInRange(startDate, endDate);
-        const calendarContainer = container.createEl('div', { cls: 'calendar-container' });
+        this.months = getMonthsInRange(startDate, endDate);
+        this.currentMonthIndex = this.months.length - 1; // Start with most recent month
+        this.activityData = activityData;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.container = container;
         
-        for (const monthDate of months) {
-            this.renderMonthCard(calendarContainer, monthDate, activityData, startDate, endDate);
+        this.calendarContainer = container.createEl('div', { cls: 'calendar-container' });
+        
+        if (this.compactMode) {
+            this.renderCurrentMonth();
+        } else {
+            this.renderAllMonths();
         }
         
         this.renderLegend(container, 'calendar-legend');
     }
 
-    renderMonthCard(container, monthDate, activityData, startDate, endDate) {
+    renderAllMonths() {
+        this.calendarContainer.empty();
+        
+        for (const monthDate of this.months) {
+            this.renderMonthCard(this.calendarContainer, monthDate, false);
+        }
+    }
+
+    renderCurrentMonth() {
+        this.calendarContainer.empty();
+        
+        const monthDate = this.months[this.currentMonthIndex];
+        const showNavigation = this.months.length > 1;
+        
+        this.renderMonthCard(this.calendarContainer, monthDate, showNavigation);
+    }
+
+    renderMonthCard(container, monthDate, showNavigation) {
         const year = monthDate.getFullYear();
         const month = monthDate.getMonth();
         
         const monthCard = container.createEl('div', { cls: 'calendar-month-card' });
         
         const monthHeader = monthCard.createEl('div', { cls: 'calendar-month-header' });
-        monthHeader.createEl('span', { text: `${MONTH_NAMES_FULL[month]} ${year}` });
+        
+        if (showNavigation) {
+            // Left arrow
+            const leftArrow = monthHeader.createEl('button', { 
+                cls: 'calendar-nav-btn calendar-nav-prev',
+                attr: { 'aria-label': t('navPrevMonth') }
+            });
+            leftArrow.innerHTML = '‹';
+            leftArrow.disabled = this.currentMonthIndex === 0;
+            leftArrow.addEventListener('click', () => this.navigateMonth(-1));
+        }
+        
+        monthHeader.createEl('span', { 
+            text: `${getMonthFull(month)} ${year}`,
+            cls: 'calendar-month-title'
+        });
+        
+        if (showNavigation) {
+            // Right arrow
+            const rightArrow = monthHeader.createEl('button', { 
+                cls: 'calendar-nav-btn calendar-nav-next',
+                attr: { 'aria-label': t('navNextMonth') }
+            });
+            rightArrow.innerHTML = '›';
+            rightArrow.disabled = this.currentMonthIndex === this.months.length - 1;
+            rightArrow.addEventListener('click', () => this.navigateMonth(1));
+        }
         
         this.renderDayNamesRow(monthCard);
         
@@ -35,29 +91,42 @@ export class CalendarRenderer extends BaseRenderer {
         const firstDayWeekday = firstDayOfMonth.getDay();
         const totalDays = lastDayOfMonth.getDate();
         
-        for (let i = 0; i < firstDayWeekday; i++) {
+        // Calculate empty cells based on first day of week setting
+        const firstDayOfWeek = this.getFirstDayOfWeek();
+        const emptyCells = (firstDayWeekday - firstDayOfWeek + 7) % 7;
+        
+        for (let i = 0; i < emptyCells; i++) {
             calendarGrid.createEl('div', { cls: 'calendar-day empty' });
         }
         
         for (let day = 1; day <= totalDays; day++) {
-            this.renderDayCell(calendarGrid, year, month, day, activityData, startDate, endDate);
+            this.renderDayCell(calendarGrid, year, month, day);
+        }
+    }
+
+    navigateMonth(direction) {
+        const newIndex = this.currentMonthIndex + direction;
+        if (newIndex >= 0 && newIndex < this.months.length) {
+            this.currentMonthIndex = newIndex;
+            this.renderCurrentMonth();
         }
     }
 
     renderDayNamesRow(monthCard) {
         const dayNamesRow = monthCard.createEl('div', { cls: 'calendar-day-names' });
-        DAY_NAMES_SHORT.forEach(day => {
+        const firstDay = this.getFirstDayOfWeek();
+        getDaysShort(firstDay).forEach(day => {
             dayNamesRow.createEl('span', { text: day, cls: 'calendar-day-name' });
         });
     }
 
-    renderDayCell(calendarGrid, year, month, day, activityData, startDate, endDate) {
+    renderDayCell(calendarGrid, year, month, day) {
         const date = new Date(year, month, day);
         const dateStr = formatDate(date);
-        const isInRange = date >= startDate && date <= endDate;
+        const isInRange = date >= this.startDate && date <= this.endDate;
         
         if (isInRange) {
-            const count = activityData[dateStr] || 0;
+            const count = this.activityData[dateStr] || 0;
             const level = getActivityLevel(count);
             
             let dayClass = `calendar-day level-${level}`;

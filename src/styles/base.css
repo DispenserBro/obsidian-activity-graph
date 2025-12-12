@@ -40,3 +40,17 @@
 .activity-graph-container::-webkit-scrollbar-thumb:hover {
     background: var(--text-muted);
 }
+
+/* Embedded Graph in Notes */
+.activity-graph-embed {
+    background: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 10px 0;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.activity-graph-embed .activity-graph {
+    display: inline-block;
+}

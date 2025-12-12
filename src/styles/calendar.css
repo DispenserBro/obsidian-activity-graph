@@ -9,6 +9,11 @@
     justify-content: flex-start;
 }
 
+/* Compact mode for embedded calendar (code blocks) */
+.activity-graph-embed .calendar-container {
+    justify-content: center;
+}
+
 .calendar-month-card {
     background: var(--background-secondary);
     border-radius: 8px;
@@ -17,14 +22,61 @@
     border: 1px solid var(--background-modifier-border);
 }
 
+/* Wider cards in compact mode for better navigation display */
+.activity-graph-embed .calendar-month-card {
+    min-width: 280px;
+    max-width: 320px;
+}
+
 .calendar-month-header {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-weight: 600;
     font-size: 14px;
     color: var(--text-normal);
     margin-bottom: 10px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.calendar-month-title {
+    flex: 1;
+    text-align: center;
+    min-width: 140px;
+}
+
+.calendar-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: var(--background-primary);
+    color: var(--text-normal);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    flex-shrink: 0;
+}
+
+.calendar-nav-btn:hover:not(:disabled) {
+    background: var(--background-modifier-hover);
+    color: var(--interactive-accent);
+}
+
+.calendar-nav-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.calendar-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .calendar-day-names {

@@ -5,6 +5,7 @@ import { ItemView } from 'obsidian';
 import { VIEW_TYPE_ACTIVITY_GRAPH } from '../constants.js';
 import { getDateRange } from '../utils.js';
 import { CommitGraphRenderer, CalendarRenderer } from '../renderers/index.js';
+import { t } from '../localization.js';
 
 export class ActivityGraphView extends ItemView {
     constructor(leaf, plugin) {
@@ -19,7 +20,7 @@ export class ActivityGraphView extends ItemView {
     }
 
     getDisplayText() {
-        return 'Activity Graph';
+        return t('viewTitle');
     }
 
     getIcon() {
@@ -36,8 +37,8 @@ export class ActivityGraphView extends ItemView {
         
         const header = container.createEl('div', { cls: 'activity-graph-header' });
         const title = this.plugin.settings.displayOnlyTasks 
-            ? 'Completed Tasks Graph' 
-            : 'Your Activity Graph';
+            ? t('tasksGraphTitle') 
+            : t('activityGraphTitle');
         header.createEl('h4', { text: title });
         
         const graphContainer = container.createEl('div', { cls: 'activity-graph' });
