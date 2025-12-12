@@ -74,6 +74,15 @@ const en = {
     firstDaySunday: 'Sunday',
     firstDayMonday: 'Monday',
     
+    // Daily Notes settings
+    settingDailyNotes: 'Daily Notes Settings',
+    settingUseDailyNotesPlugin: 'Use Daily Notes Plugin Settings',
+    settingUseDailyNotesPluginDesc: 'Use settings from Daily Notes plugin, or configure custom path and format',
+    settingCustomDailyNotesPath: 'Custom Daily Notes Path',
+    settingCustomDailyNotesPathDesc: 'Path where daily notes are stored (e.g., "Daily Notes/" or leave empty for root)',
+    settingCustomDailyNotesFormat: 'Custom Date Format',
+    settingCustomDailyNotesFormatDesc: 'Date format using moment.js syntax (e.g., YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY)',
+    
     // Navigation
     navPrevMonth: 'Previous month',
     navNextMonth: 'Next month',
@@ -150,6 +159,15 @@ const ru = {
     settingFirstDayOfWeekDesc: 'Выберите, с какого дня начинается неделя',
     firstDaySunday: 'Воскресенье',
     firstDayMonday: 'Понедельник',
+    
+    // Daily Notes settings
+    settingDailyNotes: 'Настройки ежедневных заметок',
+    settingUseDailyNotesPlugin: 'Использовать настройки плагина Daily Notes',
+    settingUseDailyNotesPluginDesc: 'Использовать настройки плагина Daily Notes или задать свой путь и формат',
+    settingCustomDailyNotesPath: 'Произвольный путь к ежедневным заметкам',
+    settingCustomDailyNotesPathDesc: 'Путь для сохранения ежедневных заметок (например, "Daily Notes/" или оставьте пустым для корня)',
+    settingCustomDailyNotesFormat: 'Произвольный формат даты',
+    settingCustomDailyNotesFormatDesc: 'Формат даты в синтаксисе moment.js (например, YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY)',
     
     // Navigation
     navPrevMonth: 'Предыдущий месяц',

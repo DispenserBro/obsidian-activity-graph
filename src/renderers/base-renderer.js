@@ -3,6 +3,7 @@
  */
 import { formatDate } from '../utils.js';
 import { t } from '../localization.js';
+import moment from 'moment';
 
 export class BaseRenderer {
     constructor(plugin = null, customSettings = null) {
@@ -126,6 +127,17 @@ export class BaseRenderer {
      * Get Daily Notes plugin settings
      */
     getDailyNotesSettings(app) {
+        const settings = this.getSettings();
+        
+        // If using custom settings, return them
+        if (!settings.useDailyNotesPlugin) {
+            return {
+                folder: settings.customDailyNotesPath || '',
+                format: settings.customDailyNotesFormat || 'YYYY-MM-DD',
+                template: ''
+            };
+        }
+
         // Try to get settings from Daily Notes core plugin
         const dailyNotesPlugin = app.internalPlugins?.getPluginById?.('daily-notes');
         if (dailyNotesPlugin?.enabled && dailyNotesPlugin?.instance?.options) {
@@ -151,38 +163,14 @@ export class BaseRenderer {
      */
     formatDailyNoteFilename(date, settings) {
         const format = settings?.format || 'YYYY-MM-DD';
-        return this.formatDateWithPattern(date, format);
+        return moment(date).format(format);
     }
 
     /**
-     * Format date with a pattern (simple moment.js-like formatting)
+     * Format date with a pattern using moment.js
      */
     formatDateWithPattern(date, format) {
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const dayOfWeek = date.getDay();
-        
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                           'July', 'August', 'September', 'October', 'November', 'December'];
-        const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-        return format
-            .replace(/YYYY/g, year)
-            .replace(/YY/g, String(year).slice(-2))
-            .replace(/MMMM/g, monthNames[month - 1])
-            .replace(/MMM/g, monthNamesShort[month - 1])
-            .replace(/MM/g, String(month).padStart(2, '0'))
-            .replace(/M/g, month)
-            .replace(/DDDD/g, dayNames[dayOfWeek])
-            .replace(/DDD/g, dayNamesShort[dayOfWeek])
-            .replace(/DD/g, String(day).padStart(2, '0'))
-            .replace(/D/g, day)
-            .replace(/dddd/g, dayNames[dayOfWeek])
-            .replace(/ddd/g, dayNamesShort[dayOfWeek]);
+        return moment(date).format(format);
     }
 
     /**
@@ -206,10 +194,11 @@ export class BaseRenderer {
                                     app.vault.getAbstractFileByPath(settings.template);
                 if (templateFile) {
                     content = await app.vault.read(templateFile);
-                    // Replace template variables
+                    // Replace template variables using moment.js
+                    const dateFormatted = moment(date).format(settings.format || 'YYYY-MM-DD');
                     content = content
-                        .replace(/{{date}}/g, this.formatDateWithPattern(date, settings.format || 'YYYY-MM-DD'))
-                        .replace(/{{title}}/g, this.formatDateWithPattern(date, settings.format || 'YYYY-MM-DD'));
+                        .replace(/{{date}}/g, dateFormatted)
+                        .replace(/{{title}}/g, dateFormatted);
                 }
             }
 

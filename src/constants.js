@@ -11,6 +11,10 @@ export const DEFAULT_SETTINGS = {
     highlightToday: true,
     highlightColor: '#7c3aed',
     firstDayOfWeek: 0, // 0 = Sunday, 1 = Monday
+    // Daily Notes settings
+    customDailyNotesPath: '',
+    customDailyNotesFormat: 'YYYY-MM-DD',
+    useDailyNotesPlugin: true,
     // Activity level colors - Light theme
     lightLevel0: '#ebedf0',
     lightLevel1: '#9be9a8',

@@ -7,11 +7,19 @@
     "dev": "node esbuild.config.mjs",
     "build": "node esbuild.config.mjs production"
   },
-  "keywords": ["obsidian", "plugin", "activity", "graph"],
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "activity",
+    "graph"
+  ],
   "author": "Dis_Bro",
   "license": "MIT",
   "devDependencies": {
     "esbuild": "^0.17.3",
     "obsidian": "latest"
+  },
+  "dependencies": {
+    "moment": "^2.30.1"
   }
 }

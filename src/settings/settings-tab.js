@@ -87,6 +87,46 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     this.plugin.updateView();
                 }));
 
+        // Daily Notes Settings Section
+        containerEl.createEl('h3', { text: t('settingDailyNotes') });
+
+        // Use Daily Notes Plugin Setting
+        new Setting(containerEl)
+            .setName(t('settingUseDailyNotesPlugin'))
+            .setDesc(t('settingUseDailyNotesPluginDesc'))
+            .addToggle(toggle => toggle
+                .setValue(this.plugin.settings.useDailyNotesPlugin)
+                .onChange(async (value) => {
+                    this.plugin.settings.useDailyNotesPlugin = value;
+                    await this.plugin.saveSettings();
+                    this.display();
+                }));
+
+        // Custom Daily Notes Path (only shown when not using plugin settings)
+        if (!this.plugin.settings.useDailyNotesPlugin) {
+            new Setting(containerEl)
+                .setName(t('settingCustomDailyNotesPath'))
+                .setDesc(t('settingCustomDailyNotesPathDesc'))
+                .addText(text => text
+                    .setPlaceholder('Daily Notes/')
+                    .setValue(this.plugin.settings.customDailyNotesPath)
+                    .onChange(async (value) => {
+                        this.plugin.settings.customDailyNotesPath = value;
+                        await this.plugin.saveSettings();
+                    }));
+
+            new Setting(containerEl)
+                .setName(t('settingCustomDailyNotesFormat'))
+                .setDesc(t('settingCustomDailyNotesFormatDesc'))
+                .addText(text => text
+                    .setPlaceholder('YYYY-MM-DD')
+                    .setValue(this.plugin.settings.customDailyNotesFormat)
+                    .onChange(async (value) => {
+                        this.plugin.settings.customDailyNotesFormat = value;
+                        await this.plugin.saveSettings();
+                    }));
+        }
+
         // Period Type Setting
         new Setting(containerEl)
             .setName(t('settingDisplayPeriod'))
