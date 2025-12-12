@@ -15,3 +15,6 @@ Thumbs.db
 
 # Debug
 *.log
+
+# Unnecessary files
+data.json
