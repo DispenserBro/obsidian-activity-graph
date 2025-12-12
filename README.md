@@ -1,8 +1,11 @@
 # Activity Graph Plugin for Obsidian
 
-A GitHub-style activity graph plugin for Obsidian that visualizes your writing activity or completed tasks as a beautiful heatmap.
+[![Version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-![Activity Graph Preview](https://img.shields.io/badge/version-1.1.0-blue)
+🌐 **[Русская версия](README_ru.md)**
+
+A GitHub-style activity graph plugin for Obsidian that visualizes your writing activity or completed tasks as a beautiful heatmap.
 
 ## Features
 
