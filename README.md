@@ -233,24 +233,6 @@ npm run build
 
 MIT License - see [LICENSE](LICENSE) for details.
 
-## Changelog
-
-### v1.2.0 (2025-12-15)
-
-**New Features:**
-- 📋 Added **Calendar Sheet View** - sidebar-only single-month calendar with navigation arrows
-- 🎯 Added **Task Status Indicators** - visual dots showing completion status (filled dot = all complete, filled + empty = has incomplete)
-- 🎭 Added **Activity Dot Position Setting** - choose between center (behind number), top-left, top-right, bottom-left, or bottom-right
-- 🎨 Added **Smart Text Contrast** - automatically adjusts text color on high activity levels for better readability
-
-**Improvements:**
-- ⚡ Reduced bundle size by ~50% with production minification (~431 KB minified)
-- 🔧 Optimized build configuration with tree-shaking and minification
-
-**Bug Fixes:**
-- Fixed tooltip positioning and cleanup issues
-- Improved navigation button styling in Calendar Sheet view
-
 ## Author
 
 **Dis_Bro** - [GitHub](https://github.com/DispenserBro)
