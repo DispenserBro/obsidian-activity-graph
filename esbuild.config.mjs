@@ -27,7 +27,7 @@ fs.writeFileSync("styles.css", combinedCss);
 console.log("CSS files combined into styles.css");
 
 const context = await esbuild.context({
-    entryPoints: ["src/main.js"],
+    entryPoints: ["src/main.ts"],
     bundle: true,
     external: ["obsidian"],
     format: "cjs",
@@ -36,6 +36,9 @@ const context = await esbuild.context({
     sourcemap: prod ? false : "inline",
     treeShaking: true,
     outfile: "main.js",
+    loader: {
+        '.json': 'json'
+    },
 });
 
 if (prod) {

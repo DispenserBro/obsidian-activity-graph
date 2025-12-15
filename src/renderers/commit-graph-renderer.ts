@@ -1,14 +1,18 @@
 /**
  * Commit Graph Renderer - GitHub-style contribution graph
  */
-import { BaseRenderer } from './base-renderer.js';
-import { formatDate, getActivityLevel } from '../utils.js';
-import { SQUARE_SIZE, GAP } from '../constants.js';
-import { getMonthShort, getDayLabels } from '../localization.js';
+import { BaseRenderer } from './base-renderer';
+import { formatDate, getActivityLevel } from '../utils';
+import { SQUARE_SIZE, GAP } from '../constants';
+import { getMonthShort, getDayLabels } from '../localization';
+import type { ActivityData } from '../types';
 
 export class CommitGraphRenderer extends BaseRenderer {
-    render(container, activityData, startDate, endDate) {
+    render(container: HTMLElement, activityData: ActivityData, startDate: Date, endDate: Date): void {
         const firstDayOfWeek = this.getFirstDayOfWeek();
+        
+        // Add global handlers to hide tooltip on scroll/outside click
+        this.addGlobalTooltipHandlers();
         
         // Calculate adjusted start date to align with first day of week
         const adjustedStart = new Date(startDate);
@@ -16,7 +20,7 @@ export class CommitGraphRenderer extends BaseRenderer {
         const daysToSubtract = (startDayOfWeek - firstDayOfWeek + 7) % 7;
         adjustedStart.setDate(adjustedStart.getDate() - daysToSubtract);
         
-        const daysDiff = Math.ceil((endDate - adjustedStart) / (1000 * 60 * 60 * 24));
+        const daysDiff = Math.ceil((endDate.getTime() - adjustedStart.getTime()) / (1000 * 60 * 60 * 24));
         const weeks = Math.ceil(daysDiff / 7);
         const weekWidth = SQUARE_SIZE + GAP;
         
@@ -31,7 +35,7 @@ export class CommitGraphRenderer extends BaseRenderer {
         this.renderLegend(container);
     }
 
-    renderMonthLabels(container, adjustedStart, endDate, weeks, weekWidth) {
+    renderMonthLabels(container: HTMLElement, adjustedStart: Date, endDate: Date, weeks: number, weekWidth: number): void {
         const monthLabels = container.createEl('div', { cls: 'graph-months' });
         
         let currentMonth = adjustedStart.getMonth();
@@ -59,7 +63,7 @@ export class CommitGraphRenderer extends BaseRenderer {
         }
     }
 
-    renderDayLabels(graphWrapper) {
+    renderDayLabels(graphWrapper: HTMLElement): void {
         const dayLabels = graphWrapper.createEl('div', { cls: 'graph-days' });
         const firstDay = this.getFirstDayOfWeek();
         const labels = getDayLabels(firstDay);
@@ -78,7 +82,7 @@ export class CommitGraphRenderer extends BaseRenderer {
         }
     }
 
-    renderWeeks(weeksContainer, activityData, adjustedStart, originalStart, endDate, weeks) {
+    renderWeeks(weeksContainer: HTMLElement, activityData: ActivityData, adjustedStart: Date, originalStart: Date, endDate: Date, weeks: number): void {
         for (let week = 0; week < weeks; week++) {
             const weekCol = weeksContainer.createEl('div', { cls: 'graph-week' });
             
@@ -113,7 +117,7 @@ export class CommitGraphRenderer extends BaseRenderer {
                 }
                 
                 square.setAttribute('data-date', dateStr);
-                square.setAttribute('data-count', count);
+                square.setAttribute('data-count', String(count));
                 
                 this.addTooltipListeners(square, dateStr, count);
             }

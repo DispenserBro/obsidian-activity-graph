@@ -1,23 +1,37 @@
 /**
  * Calendar Renderer - Monthly calendar view with optional navigation
  */
-import { BaseRenderer } from './base-renderer.js';
-import { formatDate, getActivityLevel, getMonthsInRange } from '../utils.js';
-import { getMonthFull, getDaysShort, t } from '../localization.js';
+import { BaseRenderer } from './base-renderer';
+import { formatDate, getActivityLevel, getMonthsInRange } from '../utils';
+import { getMonthFull, getDaysShort, ts } from '../localization';
+import type { ActivityData, CalendarDate, ActivityGraphPlugin } from '../types';
+import type { ActivityGraphSettings } from '../types';
 
 export class CalendarRenderer extends BaseRenderer {
-    constructor(plugin = null, customSettings = null, compactMode = false) {
+    private compactMode: boolean;
+    private months!: Date[];
+    private currentMonthIndex!: number;
+    private activityData!: ActivityData;
+    private startDate!: Date;
+    private endDate!: Date;
+    private container!: HTMLElement;
+    private calendarContainer!: HTMLElement;
+
+    constructor(plugin: ActivityGraphPlugin | null = null, customSettings: Partial<ActivityGraphSettings> | null = null, compactMode: boolean = false) {
         super(plugin, customSettings);
         this.compactMode = compactMode; // true = single month with navigation, false = all months
     }
 
-    render(container, activityData, startDate, endDate) {
+    render(container: HTMLElement, activityData: ActivityData, startDate: Date, endDate: Date): void {
         this.months = getMonthsInRange(startDate, endDate);
         this.currentMonthIndex = this.months.length - 1; // Start with most recent month
         this.activityData = activityData;
         this.startDate = startDate;
         this.endDate = endDate;
         this.container = container;
+        
+        // Add global handlers to hide tooltip on scroll/outside click
+        this.addGlobalTooltipHandlers();
         
         this.calendarContainer = container.createEl('div', { cls: 'calendar-container' });
         
@@ -30,7 +44,7 @@ export class CalendarRenderer extends BaseRenderer {
         this.renderLegend(container, 'calendar-legend');
     }
 
-    renderAllMonths() {
+    renderAllMonths(): void {
         this.calendarContainer.empty();
         
         for (const monthDate of this.months) {
@@ -38,7 +52,7 @@ export class CalendarRenderer extends BaseRenderer {
         }
     }
 
-    renderCurrentMonth() {
+    renderCurrentMonth(): void {
         this.calendarContainer.empty();
         
         const monthDate = this.months[this.currentMonthIndex];
@@ -47,7 +61,7 @@ export class CalendarRenderer extends BaseRenderer {
         this.renderMonthCard(this.calendarContainer, monthDate, showNavigation);
     }
 
-    renderMonthCard(container, monthDate, showNavigation) {
+    renderMonthCard(container: HTMLElement, monthDate: Date, showNavigation: boolean): void {
         const year = monthDate.getFullYear();
         const month = monthDate.getMonth();
         
@@ -59,7 +73,7 @@ export class CalendarRenderer extends BaseRenderer {
             // Left arrow
             const leftArrow = monthHeader.createEl('button', { 
                 cls: 'calendar-nav-btn calendar-nav-prev',
-                attr: { 'aria-label': t('navPrevMonth') }
+                attr: { 'aria-label': ts('navPrevMonth') }
             });
             leftArrow.innerHTML = '‹';
             leftArrow.disabled = this.currentMonthIndex === 0;
@@ -75,7 +89,7 @@ export class CalendarRenderer extends BaseRenderer {
             // Right arrow
             const rightArrow = monthHeader.createEl('button', { 
                 cls: 'calendar-nav-btn calendar-nav-next',
-                attr: { 'aria-label': t('navNextMonth') }
+                attr: { 'aria-label': ts('navNextMonth') }
             });
             rightArrow.innerHTML = '›';
             rightArrow.disabled = this.currentMonthIndex === this.months.length - 1;
@@ -104,7 +118,7 @@ export class CalendarRenderer extends BaseRenderer {
         }
     }
 
-    navigateMonth(direction) {
+    navigateMonth(direction: number): void {
         const newIndex = this.currentMonthIndex + direction;
         if (newIndex >= 0 && newIndex < this.months.length) {
             this.currentMonthIndex = newIndex;
@@ -112,7 +126,7 @@ export class CalendarRenderer extends BaseRenderer {
         }
     }
 
-    renderDayNamesRow(monthCard) {
+    renderDayNamesRow(monthCard: HTMLElement): void {
         const dayNamesRow = monthCard.createEl('div', { cls: 'calendar-day-names' });
         const firstDay = this.getFirstDayOfWeek();
         getDaysShort(firstDay).forEach(day => {
@@ -120,7 +134,7 @@ export class CalendarRenderer extends BaseRenderer {
         });
     }
 
-    renderDayCell(calendarGrid, year, month, day) {
+    renderDayCell(calendarGrid: HTMLElement, year: number, month: number, day: number): void {
         const date = new Date(year, month, day);
         const dateStr = formatDate(date);
         const isInRange = date >= this.startDate && date <= this.endDate;
@@ -145,7 +159,7 @@ export class CalendarRenderer extends BaseRenderer {
             }
             
             dayCell.setAttribute('data-date', dateStr);
-            dayCell.setAttribute('data-count', count);
+            dayCell.setAttribute('data-count', String(count));
             
             this.addTooltipListeners(dayCell, dateStr, count);
         } else {

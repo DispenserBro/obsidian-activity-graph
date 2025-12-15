@@ -1,8 +1,11 @@
+import { Vault } from 'obsidian';
+import { ActivityData } from './types/ActivityData';
+
 /**
  * Extract completed task dates from file content
  */
-function extractCompletedTaskDates(content) {
-    const dates = [];
+function extractCompletedTaskDates(content: string): string[] {
+    const dates: string[] = [];
     const lines = content.split('\n');
     
     for (const line of lines) {
@@ -45,8 +48,8 @@ function extractCompletedTaskDates(content) {
 /**
  * Load tasks data from all markdown files in vault
  */
-export async function loadTasksFromVault(vault) {
-    const tasksData = {};
+export async function loadTasksFromVault(vault: Vault): Promise<ActivityData> {
+    const tasksData: ActivityData = {};
     const files = vault.getMarkdownFiles();
     
     for (const file of files) {
