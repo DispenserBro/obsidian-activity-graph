@@ -2,7 +2,7 @@
   "id": "activity-graph",
   "name": "Activity Graph",
   "version": "1.2.0",
-  "minAppVersion": "0.15.0",
+  "minAppVersion": "1.4.0",
   "description": "GitHub-style activity graph that visualizes your writing activity or completed tasks as a heatmap",
   "author": "Dis_Bro",
   "authorUrl": "https://github.com/DispenserBro",
