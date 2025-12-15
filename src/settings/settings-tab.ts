@@ -70,31 +70,55 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
             });
         }
 
-        // Display Only Tasks Setting
-        new Setting(containerEl)
-            .setName(ts('settingDisplayOnlyTasks'))
-            .setDesc(ts('settingDisplayOnlyTasksDesc'))
-            .addToggle(toggle => toggle
-                .setValue(this.plugin.settings.displayOnlyTasks)
-                .onChange(async (value) => {
-                    this.plugin.settings.displayOnlyTasks = value;
-                    await this.plugin.saveSettings();
-                    this.plugin.updateView();
-                }));
+        // Display Only Tasks Setting (only show if Tasks plugin is installed)
+        if (this.plugin.isTasksPluginEnabled()) {
+            new Setting(containerEl)
+                .setName(ts('settingDisplayOnlyTasks'))
+                .setDesc(ts('settingDisplayOnlyTasksDesc'))
+                .addToggle(toggle => toggle
+                    .setValue(this.plugin.settings.displayOnlyTasks)
+                    .onChange(async (value) => {
+                        this.plugin.settings.displayOnlyTasks = value;
+                        await this.plugin.saveSettings();
+                        this.plugin.updateView();
+                    }));
+        }
 
         // Display Style Setting
         new Setting(containerEl)
             .setName(ts('settingDisplayStyle'))
             .setDesc(ts('settingDisplayStyleDesc'))
             .addDropdown(dropdown => dropdown
-                .addOption('commitGraph', ts('styleCommitGraph'))
+                .addOption('commit-graph', ts('styleCommitGraph'))
                 .addOption('calendar', ts('styleCalendar'))
+                .addOption('calendar-sheet', ts('styleCalendarSheet'))
                 .setValue(this.plugin.settings.displayStyle)
                 .onChange(async (value) => {
-                    this.plugin.settings.displayStyle = value as 'commit-graph' | 'calendar';
+                    this.plugin.settings.displayStyle = value as 'commit-graph' | 'calendar' | 'calendar-sheet';
                     await this.plugin.saveSettings();
                     this.plugin.updateView();
+                    // Refresh display to show/hide activity dot position setting
+                    this.display();
                 }));
+
+        // Activity Dot Position Setting (only for calendar-sheet)
+        if (this.plugin.settings.displayStyle === 'calendar-sheet') {
+            new Setting(containerEl)
+                .setName(ts('settingActivityDotPosition'))
+                .setDesc(ts('settingActivityDotPositionDesc'))
+                .addDropdown(dropdown => dropdown
+                    .addOption('center', ts('positionCenter'))
+                    .addOption('top-left', ts('positionTopLeft'))
+                    .addOption('top-right', ts('positionTopRight'))
+                    .addOption('bottom-left', ts('positionBottomLeft'))
+                    .addOption('bottom-right', ts('positionBottomRight'))
+                    .setValue(this.plugin.settings.activityDotPosition)
+                    .onChange(async (value) => {
+                        this.plugin.settings.activityDotPosition = value as any;
+                        await this.plugin.saveSettings();
+                        this.plugin.updateView();
+                    }));
+        }
 
         // First Day of Week Setting
         new Setting(containerEl)

@@ -126,7 +126,7 @@ export class CodeBlockProcessor {
 
         // Load data
         let activityData;
-        if (settings.displayOnlyTasks) {
+        if (settings.displayOnlyTasks && this.plugin.isTasksPluginEnabled()) {
             await this.plugin.loadTasksData();
             activityData = this.plugin.tasksData;
         } else {
@@ -137,8 +137,9 @@ export class CodeBlockProcessor {
 
         // Create renderer with custom settings
         // Code blocks use compact mode for calendar (single month with navigation)
+        // IMPORTANT: calendar-sheet is only for sidebar view, in code blocks it uses calendar
         let renderer;
-        if (settings.displayStyle === 'calendar') {
+        if (settings.displayStyle === 'calendar' || settings.displayStyle === 'calendar-sheet') {
             renderer = new CalendarRenderer(this.plugin, settings, true); // compactMode = true
         } else {
             renderer = new CommitGraphRenderer(this.plugin, settings);

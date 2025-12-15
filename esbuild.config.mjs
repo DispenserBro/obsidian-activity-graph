@@ -11,6 +11,7 @@ const cssFiles = [
     "base.css",
     "commit-graph.css", 
     "calendar.css",
+    "calendar-sheet.css",
     "legend-tooltip.css",
     "settings.css"
 ];
@@ -35,10 +36,14 @@ const context = await esbuild.context({
     logLevel: "info",
     sourcemap: prod ? false : "inline",
     treeShaking: true,
+    minify: prod,
     outfile: "main.js",
     loader: {
         '.json': 'json'
     },
+    define: {
+        'process.env.NODE_ENV': prod ? '"production"' : '"development"'
+    }
 });
 
 if (prod) {

@@ -42,6 +42,15 @@ export const STRINGS_RU: LocaleStrings = {
     settingDisplayStyleDesc: 'Выберите способ отображения графика активности',
     styleCommitGraph: 'Commit Graph',
     styleCalendar: 'Календарь',
+    styleCalendarSheet: 'Лист календаря',
+    
+    settingActivityDotPosition: 'Позиция круга активности',
+    settingActivityDotPositionDesc: 'Выберите где отображать круг активности в виде листа календаря',
+    positionCenter: 'По центру (за числом)',
+    positionTopLeft: 'Слева вверху',
+    positionTopRight: 'Справа вверху',
+    positionBottomLeft: 'Слева внизу',
+    positionBottomRight: 'Справа внизу',
     
     settingDisplayPeriod: 'Период отображения',
     settingDisplayPeriodDesc: 'Выберите временной период для отображения на графике',

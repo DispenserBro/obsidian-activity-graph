@@ -34,6 +34,14 @@ export interface LocaleStrings {
     settingDisplayStyleDesc: string;
     styleCommitGraph: string;
     styleCalendar: string;
+    styleCalendarSheet: string;
+    settingActivityDotPosition: string;
+    settingActivityDotPositionDesc: string;
+    positionCenter: string;
+    positionTopLeft: string;
+    positionTopRight: string;
+    positionBottomLeft: string;
+    positionBottomRight: string;
     settingDisplayPeriod: string;
     settingDisplayPeriodDesc: string;
     period1Month: string;

@@ -61,17 +61,8 @@ export async function initLocale(app: App): Promise<string> {
  * Set moment.js locale
  */
 async function setMomentLocale(locale: string): Promise<void> {
-    // Dynamically load locale if needed and not already loaded
-    if (locale !== 'en' && !moment.locales().includes(locale)) {
-        try {
-            await import(`moment/locale/${locale}.js`);
-        } catch (e) {
-            // Locale not available, will fallback to English
-            console.debug(`Moment.js locale '${locale}' not available, using English`);
-        }
-    }
-    
-    // Set global locale for moment
+    // All locales are already loaded via 'moment/min/locales'
+    // Just set the locale
     moment.locale(locale);
 }
 

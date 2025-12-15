@@ -1,6 +1,6 @@
 # Activity Graph Plugin for Obsidian
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 🌐 **[Русская версия](README_ru.md)**
@@ -11,8 +11,11 @@ A GitHub-style activity graph plugin for Obsidian that visualizes your writing a
 
 - 📊 **GitHub-style Commit Graph** - Visualize your activity with a familiar heatmap
 - 📅 **Calendar View** - Monthly calendar with activity levels
+- 📋 **Calendar Sheet View** - Single-month sidebar view similar to obsidian-calendar-plugin
 - ✅ **Tasks Integration** - Track completed tasks from Tasks plugin
-- 🎨 **Customizable Colors** - Full control over activity level colors for light and dark themes
+- � **Task Status Indicators** - Visual dots showing task completion status in Calendar Sheet
+- �🎨 **Customizable Colors** - Full control over activity level colors for light and dark themes
+- 🎭 **Activity Dot Positioning** - Choose where to display activity indicators (center, corners)
 - 🌍 **Localization** - English and Russian language support (auto-detected from Obsidian settings)
 - 📝 **Code Block Embedding** - Embed graphs directly in your notes
 - 🔗 **Daily Notes Integration** - Click on any day to open its daily note
@@ -229,6 +232,24 @@ npm run build
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+## Changelog
+
+### v1.2.0 (2025-12-15)
+
+**New Features:**
+- 📋 Added **Calendar Sheet View** - sidebar-only single-month calendar with navigation arrows
+- 🎯 Added **Task Status Indicators** - visual dots showing completion status (filled dot = all complete, filled + empty = has incomplete)
+- 🎭 Added **Activity Dot Position Setting** - choose between center (behind number), top-left, top-right, bottom-left, or bottom-right
+- 🎨 Added **Smart Text Contrast** - automatically adjusts text color on high activity levels for better readability
+
+**Improvements:**
+- ⚡ Reduced bundle size by ~50% with production minification (~431 KB minified)
+- 🔧 Optimized build configuration with tree-shaking and minification
+
+**Bug Fixes:**
+- Fixed tooltip positioning and cleanup issues
+- Improved navigation button styling in Calendar Sheet view
 
 ## Author
 

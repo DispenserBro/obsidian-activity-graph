@@ -13,6 +13,7 @@ export const DEFAULT_SETTINGS: Partial<ActivityGraphSettings> = {
     highlightToday: true,
     highlightColor: '#7c3aed',
     firstDayOfWeek: 0, // 0 = Sunday, 1 = Monday
+    activityDotPosition: 'center',
     // Daily Notes settings
     customDailyNotesPath: '',
     customDailyNotesFormat: 'YYYY-MM-DD',

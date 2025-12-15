@@ -1,6 +1,6 @@
 {
   "name": "activity-graph",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "GitHub-style activity graph for Obsidian",
   "main": "main.js",
   "scripts": {

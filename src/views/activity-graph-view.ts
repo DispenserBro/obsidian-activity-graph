@@ -4,7 +4,7 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 import { VIEW_TYPE_ACTIVITY_GRAPH } from '../constants';
 import { getDateRange } from '../utils';
-import { CommitGraphRenderer, CalendarRenderer } from '../renderers/index';
+import { CommitGraphRenderer, CalendarRenderer, CalendarSheetRenderer } from '../renderers/index';
 import { ts } from '../localization';
 import type { ActivityGraphPlugin } from '../types';
 
@@ -12,12 +12,14 @@ export class ActivityGraphView extends ItemView {
     private plugin: ActivityGraphPlugin;
     private commitGraphRenderer: CommitGraphRenderer;
     private calendarRenderer: CalendarRenderer;
+    private calendarSheetRenderer: CalendarSheetRenderer;
 
     constructor(leaf: WorkspaceLeaf, plugin: ActivityGraphPlugin) {
         super(leaf);
         this.plugin = plugin;
         this.commitGraphRenderer = new CommitGraphRenderer(plugin);
         this.calendarRenderer = new CalendarRenderer(plugin);
+        this.calendarSheetRenderer = new CalendarSheetRenderer(plugin);
     }
 
     getViewType(): string {
@@ -41,15 +43,20 @@ export class ActivityGraphView extends ItemView {
         this.applyCustomColors(container);
         
         const header = container.createEl('div', { cls: 'activity-graph-header' });
-        const title = this.plugin.settings.displayOnlyTasks 
+        const title = (this.plugin.settings.displayOnlyTasks && this.plugin.isTasksPluginEnabled())
             ? ts('tasksGraphTitle') 
             : ts('activityGraphTitle');
         header.createEl('h4', { text: title });
         
         const graphContainer = container.createEl('div', { cls: 'activity-graph' });
         
-        if (this.plugin.settings.displayOnlyTasks) {
+        if (this.plugin.settings.displayOnlyTasks && this.plugin.isTasksPluginEnabled()) {
             await this.plugin.loadTasksData();
+        }
+        
+        // Load tasks status data for calendar sheet if Tasks plugin is enabled
+        if (this.plugin.isTasksPluginEnabled()) {
+            await this.plugin.loadTasksStatusData();
         }
         
         this.renderGraph(graphContainer);
@@ -75,8 +82,9 @@ export class ActivityGraphView extends ItemView {
         // Hide any existing tooltips before rendering
         this.commitGraphRenderer.cleanup();
         this.calendarRenderer.cleanup();
+        this.calendarSheetRenderer.cleanup();
         
-        const activityData = this.plugin.settings.displayOnlyTasks 
+        const activityData = (this.plugin.settings.displayOnlyTasks && this.plugin.isTasksPluginEnabled())
             ? this.plugin.tasksData 
             : this.plugin.activityData;
         const settings = this.plugin.settings;
@@ -85,6 +93,19 @@ export class ActivityGraphView extends ItemView {
         
         if (settings.displayStyle === 'calendar') {
             this.calendarRenderer.render(container, activityData, startDate, endDate);
+        } else if (settings.displayStyle === 'calendar-sheet') {
+            // Pass tasks status data to calendar sheet if Tasks plugin is enabled
+            const tasksStatusData = this.plugin.isTasksPluginEnabled() 
+                ? this.plugin.tasksStatusData 
+                : {};
+            this.calendarSheetRenderer.render(
+                container, 
+                activityData, 
+                startDate, 
+                endDate, 
+                tasksStatusData,
+                settings.activityDotPosition
+            );
         } else {
             this.commitGraphRenderer.render(container, activityData, startDate, endDate);
         }
@@ -94,5 +115,6 @@ export class ActivityGraphView extends ItemView {
         // Cleanup renderers
         this.commitGraphRenderer.cleanup();
         this.calendarRenderer.cleanup();
+        this.calendarSheetRenderer.cleanup();
     }
 }

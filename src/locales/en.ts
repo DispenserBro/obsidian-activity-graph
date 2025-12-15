@@ -42,6 +42,15 @@ export const STRINGS_EN: LocaleStrings = {
     settingDisplayStyleDesc: 'Choose how to display the activity graph',
     styleCommitGraph: 'Commit Graph',
     styleCalendar: 'Calendar',
+    styleCalendarSheet: 'Calendar Sheet',
+    
+    settingActivityDotPosition: 'Activity Dot Position',
+    settingActivityDotPositionDesc: 'Choose where to display the activity dot in calendar sheet view',
+    positionCenter: 'Center (behind number)',
+    positionTopLeft: 'Top Left',
+    positionTopRight: 'Top Right',
+    positionBottomLeft: 'Bottom Left',
+    positionBottomRight: 'Bottom Right',
     
     settingDisplayPeriod: 'Display Period',
     settingDisplayPeriodDesc: 'Choose the time period to display in the activity graph',

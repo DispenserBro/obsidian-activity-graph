@@ -1,5 +1,7 @@
-import { Vault } from 'obsidian';
+import { Vault, TFile } from 'obsidian';
 import { ActivityData } from './types/ActivityData';
+import { TasksStatusData, DayTasksStatus } from './types/DayTasksStatus';
+import { getDailyNotesSettings, formatDailyNoteFilename } from './utils';
 
 /**
  * Extract completed task dates from file content
@@ -69,4 +71,72 @@ export async function loadTasksFromVault(vault: Vault): Promise<ActivityData> {
     }
     
     return tasksData;
+}
+
+/**
+ * Analyze tasks in a file and return status
+ */
+function analyzeFileTasks(content: string): { hasCompleted: boolean; hasIncomplete: boolean } {
+    const lines = content.split('\n');
+    let hasCompleted = false;
+    let hasIncomplete = false;
+    
+    for (const line of lines) {
+        // Check for task markers
+        const isTask = /^[\s]*[-*]\s*\[([ xX])\]/.test(line);
+        if (!isTask) continue;
+        
+        // Check if completed
+        const isCompleted = /^[\s]*[-*]\s*\[x\]/i.test(line);
+        
+        if (isCompleted) {
+            hasCompleted = true;
+        } else {
+            hasIncomplete = true;
+        }
+        
+        // Early exit if we found both types
+        if (hasCompleted && hasIncomplete) {
+            break;
+        }
+    }
+    
+    return { hasCompleted, hasIncomplete };
+}
+
+/**
+ * Load tasks status for daily notes
+ * Returns a map of date -> task status
+ */
+export async function loadTasksStatusFromDailyNotes(
+    vault: Vault,
+    app: any
+): Promise<TasksStatusData> {
+    const statusData: TasksStatusData = {};
+    const settings = getDailyNotesSettings(app);
+    const files = vault.getMarkdownFiles();
+    
+    for (const file of files) {
+        try {
+            // Try to extract date from filename
+            const dateMatch = file.basename.match(/(\d{4}-\d{2}-\d{2})/);
+            if (!dateMatch) continue;
+            
+            const dateStr = dateMatch[1];
+            const content = await vault.cachedRead(file);
+            const { hasCompleted, hasIncomplete } = analyzeFileTasks(content);
+            
+            // Only add if file has tasks
+            if (hasCompleted || hasIncomplete) {
+                statusData[dateStr] = {
+                    hasCompletedTasks: hasCompleted,
+                    hasIncompleteTasks: hasIncomplete
+                };
+            }
+        } catch (error) {
+            console.error(`Error analyzing file ${file.path}:`, error);
+        }
+    }
+    
+    return statusData;
 }

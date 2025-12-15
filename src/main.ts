@@ -5,17 +5,28 @@
 import { Plugin } from 'obsidian';
 import { VIEW_TYPE_ACTIVITY_GRAPH, DEFAULT_SETTINGS } from './constants';
 import { formatDate } from './utils';
-import { loadTasksFromVault } from './tasks-parser';
+import { loadTasksFromVault, loadTasksStatusFromDailyNotes } from './tasks-parser';
 import { ActivityGraphView } from './views/activity-graph-view';
 import { ActivityGraphSettingTab } from './settings/settings-tab';
 import { CodeBlockProcessor } from './processors/code-block-processor';
 import { initLocale } from './localization';
-import type { ActivityGraphSettings, ActivityData } from './types';
+import type { ActivityGraphSettings, ActivityData, TasksStatusData } from './types';
 
 export default class ActivityGraphPlugin extends Plugin {
     settings!: ActivityGraphSettings;
     activityData!: ActivityData;
     tasksData!: ActivityData;
+    tasksStatusData!: TasksStatusData;
+
+    /**
+     * Check if Tasks plugin is installed and enabled
+     */
+    isTasksPluginEnabled(): boolean {
+        // @ts-ignore - accessing internal API
+        const tasksPlugin = this.app.plugins.plugins['obsidian-tasks-plugin'];
+        // @ts-ignore
+        return tasksPlugin && this.app.plugins.enabledPlugins.has('obsidian-tasks-plugin');
+    }
 
     async onload(): Promise<void> {
         console.log('Loading Activity Graph plugin');
@@ -68,6 +79,12 @@ export default class ActivityGraphPlugin extends Plugin {
 
     async loadSettings() {
         this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+        
+        // If Tasks plugin is not enabled, disable displayOnlyTasks
+        if (!this.isTasksPluginEnabled() && this.settings.displayOnlyTasks) {
+            this.settings.displayOnlyTasks = false;
+            await this.saveSettings();
+        }
     }
 
     async saveSettings() {
@@ -78,10 +95,15 @@ export default class ActivityGraphPlugin extends Plugin {
         const data = await this.loadData();
         this.activityData = data?.activityData || {};
         this.tasksData = {};
+        this.tasksStatusData = {};
     }
 
     async loadTasksData() {
         this.tasksData = await loadTasksFromVault(this.app.vault);
+    }
+
+    async loadTasksStatusData() {
+        this.tasksStatusData = await loadTasksStatusFromDailyNotes(this.app.vault, this.app);
     }
 
     async saveActivityData() {

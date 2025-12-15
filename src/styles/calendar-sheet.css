@@ -1,0 +1,256 @@
+/* 
+   Calendar Sheet Styles - Single month view with navigation
+*/
+
+.calendar-sheet-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Navigation */
+.calendar-sheet-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 8px;
+    margin-bottom: 8px;
+}
+
+.calendar-sheet-nav-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+.calendar-sheet-nav-btn {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text-muted);
+    font-size: 32px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-weight: 300;
+}
+
+.calendar-sheet-nav-btn:hover {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-normal);
+}
+
+.calendar-sheet-nav-btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.calendar-sheet-nav-btn:active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.calendar-sheet-nav-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.calendar-sheet-nav-btn.disabled:hover {
+    background: transparent !important;
+    color: var(--text-muted);
+}
+
+/* Calendar grid */
+.calendar-sheet-month {
+    width: 100%;
+}
+
+.calendar-sheet-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* Day headers */
+.calendar-sheet-day-header {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 8px 4px;
+    text-transform: uppercase;
+}
+
+/* Day cells */
+.calendar-sheet-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 40px;
+}
+
+.calendar-sheet-day:not(.empty):hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.calendar-sheet-day.empty {
+    cursor: default;
+}
+
+/* Day number */
+.calendar-sheet-day-number {
+    font-size: 13px;
+    color: var(--text-normal);
+    line-height: 1;
+    z-index: 2;
+    position: relative;
+}
+
+/* Light text for light theme high activity levels (dark green needs light text) */
+.theme-light .calendar-sheet-day .calendar-sheet-day-number.dark-text {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Dark text for dark theme high activity levels (bright green needs dark text) */
+.theme-dark .calendar-sheet-day .calendar-sheet-day-number.dark-text {
+    color: #000000 !important;
+    font-weight: 600 !important;
+}
+
+.calendar-sheet-day.out-of-range .calendar-sheet-day-number {
+    color: var(--text-faint);
+}
+
+/* Activity dot - default center position behind day number */
+.calendar-sheet-dot {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Center position - large circle behind number */
+.calendar-sheet-dot.position-center {
+    width: 26px;
+    height: 26px;
+}
+
+/* Corner positions - smaller dots */
+.calendar-sheet-dot.position-top-left,
+.calendar-sheet-dot.position-top-right,
+.calendar-sheet-dot.position-bottom-left,
+.calendar-sheet-dot.position-bottom-right {
+    width: 6px;
+    height: 6px;
+}
+
+.calendar-sheet-dot.position-top-left {
+    top: 4px;
+    left: 4px;
+}
+
+.calendar-sheet-dot.position-top-right {
+    top: 4px;
+    right: 4px;
+}
+
+.calendar-sheet-dot.position-bottom-left {
+    bottom: 4px;
+    left: 4px;
+}
+
+.calendar-sheet-dot.position-bottom-right {
+    bottom: 4px;
+    right: 4px;
+}
+
+/* Activity levels using CSS variables */
+.theme-light .calendar-sheet-dot.level-1 {
+    background-color: var(--activity-light-level-1);
+}
+
+.theme-light .calendar-sheet-dot.level-2 {
+    background-color: var(--activity-light-level-2);
+}
+
+.theme-light .calendar-sheet-dot.level-3 {
+    background-color: var(--activity-light-level-3);
+}
+
+.theme-light .calendar-sheet-dot.level-4 {
+    background-color: var(--activity-light-level-4);
+}
+
+.theme-dark .calendar-sheet-dot.level-1 {
+    background-color: var(--activity-dark-level-1);
+}
+
+.theme-dark .calendar-sheet-dot.level-2 {
+    background-color: var(--activity-dark-level-2);
+}
+
+.theme-dark .calendar-sheet-dot.level-3 {
+    background-color: var(--activity-dark-level-3);
+}
+
+.theme-dark .calendar-sheet-dot.level-4 {
+    background-color: var(--activity-dark-level-4);
+}
+
+/* Today highlight - light background with border */
+.calendar-sheet-day.today {
+    background-color: var(--background-modifier-hover);
+    border: 2px solid var(--interactive-accent);
+}
+
+.calendar-sheet-day.today .calendar-sheet-day-number {
+    font-weight: 600;
+}
+
+.calendar-sheet-day.today:hover {
+    background-color: var(--background-modifier-hover-active);
+}
+
+/* Task status dots */
+.calendar-sheet-task-dots {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.calendar-sheet-task-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.calendar-sheet-task-dot.filled {
+    background-color: var(--text-accent);
+}
+
+.calendar-sheet-task-dot.empty {
+    background-color: transparent;
+    border: 1px solid var(--text-accent);
+}
