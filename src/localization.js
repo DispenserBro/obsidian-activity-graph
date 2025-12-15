@@ -82,6 +82,7 @@ const en = {
     settingCustomDailyNotesPathDesc: 'Path where daily notes are stored (e.g., "Daily Notes/" or leave empty for root)',
     settingCustomDailyNotesFormat: 'Custom Date Format',
     settingCustomDailyNotesFormatDesc: 'Date format using moment.js syntax (e.g., YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY)',
+    settingDailyNotesPreviewExample: 'Example:',
     
     // Navigation
     navPrevMonth: 'Previous month',
@@ -168,6 +169,7 @@ const ru = {
     settingCustomDailyNotesPathDesc: 'Путь для сохранения ежедневных заметок (например, "Daily Notes/" или оставьте пустым для корня)',
     settingCustomDailyNotesFormat: 'Произвольный формат даты',
     settingCustomDailyNotesFormatDesc: 'Формат даты в синтаксисе moment.js (например, YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY)',
+    settingDailyNotesPreviewExample: 'Пример:',
     
     // Navigation
     navPrevMonth: 'Предыдущий месяц',

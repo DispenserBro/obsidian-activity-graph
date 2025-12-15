@@ -3,6 +3,7 @@
  */
 import { PluginSettingTab, Setting } from 'obsidian';
 import { t } from '../localization.js';
+import { getDailyNotePath } from '../utils.js';
 
 export class ActivityGraphSettingTab extends PluginSettingTab {
     constructor(app, plugin) {
@@ -10,7 +11,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
-    display() {
+    async display() {
         const { containerEl } = this;
         containerEl.empty();
 
@@ -91,9 +92,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         containerEl.createEl('h3', { text: t('settingDailyNotes') });
 
         // Use Daily Notes Plugin Setting
+        const previewPath = await getDailyNotePath(this.app, this.plugin.settings);
+        const useDailyNotesDesc = `${t('settingUseDailyNotesPluginDesc')}\n${t('settingDailyNotesPreviewExample')} ${previewPath}`;
+        
         new Setting(containerEl)
             .setName(t('settingUseDailyNotesPlugin'))
-            .setDesc(t('settingUseDailyNotesPluginDesc'))
+            .setDesc(useDailyNotesDesc)
             .addToggle(toggle => toggle
                 .setValue(this.plugin.settings.useDailyNotesPlugin)
                 .onChange(async (value) => {
@@ -113,17 +117,22 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     .onChange(async (value) => {
                         this.plugin.settings.customDailyNotesPath = value;
                         await this.plugin.saveSettings();
+                        this.display();
                     }));
 
+            const formatPreviewPath = await getDailyNotePath(this.app, this.plugin.settings);
+            const formatDesc = `${t('settingCustomDailyNotesFormatDesc')}\n${t('settingDailyNotesPreviewExample')} ${formatPreviewPath}`;
+            
             new Setting(containerEl)
                 .setName(t('settingCustomDailyNotesFormat'))
-                .setDesc(t('settingCustomDailyNotesFormatDesc'))
+                .setDesc(formatDesc)
                 .addText(text => text
                     .setPlaceholder('YYYY-MM-DD')
                     .setValue(this.plugin.settings.customDailyNotesFormat)
                     .onChange(async (value) => {
                         this.plugin.settings.customDailyNotesFormat = value;
                         await this.plugin.saveSettings();
+                        this.display();
                     }));
         }
 

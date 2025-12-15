@@ -1,9 +1,8 @@
 /**
  * Base Renderer - Common functionality for graph renderers
  */
-import { formatDate } from '../utils.js';
+import { formatDate, getDailyNotesSettings, formatDailyNoteFilename } from '../utils.js';
 import { t } from '../localization.js';
-import moment from 'moment';
 
 export class BaseRenderer {
     constructor(plugin = null, customSettings = null) {
@@ -98,14 +97,14 @@ export class BaseRenderer {
 
         const app = this.plugin.app;
         
-        // Try to get Daily Notes plugin settings
-        const dailyNotesSettings = this.getDailyNotesSettings(app);
+        // Get Daily Notes plugin settings
+        const dailyNotesSettings = getDailyNotesSettings(app, this.getSettings());
         
         // Parse the date
         const date = new Date(dateStr);
         
-        // Format the filename based on Daily Notes settings or default
-        const filename = this.formatDailyNoteFilename(date, dailyNotesSettings);
+        // Format the filename based on Daily Notes settings
+        const filename = await formatDailyNoteFilename(date, dailyNotesSettings.format);
         const folder = dailyNotesSettings?.folder || '';
         
         // Build the full path
@@ -121,56 +120,6 @@ export class BaseRenderer {
             // Create and open new file
             await this.createAndOpenDailyNote(app, fullPath, date, dailyNotesSettings);
         }
-    }
-
-    /**
-     * Get Daily Notes plugin settings
-     */
-    getDailyNotesSettings(app) {
-        const settings = this.getSettings();
-        
-        // If using custom settings, return them
-        if (!settings.useDailyNotesPlugin) {
-            return {
-                folder: settings.customDailyNotesPath || '',
-                format: settings.customDailyNotesFormat || 'YYYY-MM-DD',
-                template: ''
-            };
-        }
-
-        // Try to get settings from Daily Notes core plugin
-        const dailyNotesPlugin = app.internalPlugins?.getPluginById?.('daily-notes');
-        if (dailyNotesPlugin?.enabled && dailyNotesPlugin?.instance?.options) {
-            return dailyNotesPlugin.instance.options;
-        }
-
-        // Try to get settings from Periodic Notes community plugin
-        const periodicNotes = app.plugins?.getPlugin?.('periodic-notes');
-        if (periodicNotes?.settings?.daily) {
-            return periodicNotes.settings.daily;
-        }
-
-        // Default settings
-        return {
-            folder: '',
-            format: 'YYYY-MM-DD',
-            template: ''
-        };
-    }
-
-    /**
-     * Format the daily note filename based on date and settings
-     */
-    formatDailyNoteFilename(date, settings) {
-        const format = settings?.format || 'YYYY-MM-DD';
-        return moment(date).format(format);
-    }
-
-    /**
-     * Format date with a pattern using moment.js
-     */
-    formatDateWithPattern(date, format) {
-        return moment(date).format(format);
     }
 
     /**
@@ -194,8 +143,8 @@ export class BaseRenderer {
                                     app.vault.getAbstractFileByPath(settings.template);
                 if (templateFile) {
                     content = await app.vault.read(templateFile);
-                    // Replace template variables using moment.js
-                    const dateFormatted = moment(date).format(settings.format || 'YYYY-MM-DD');
+                    // Replace template variables using moment.js with locale
+                    const dateFormatted = await formatDailyNoteFilename(date, settings.format);
                     content = content
                         .replace(/{{date}}/g, dateFormatted)
                         .replace(/{{title}}/g, dateFormatted);
