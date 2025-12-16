@@ -7,6 +7,10 @@
 
 A GitHub-style activity graph plugin for Obsidian that visualizes your writing activity or completed tasks as a beautiful heatmap.
 
+![ezgif-55ee87c7b2fa637a](https://github.com/user-attachments/assets/7a5ebfbd-f183-46e7-a64d-1f0bb874fce4)
+
+![ezgif-8d1eed8373efce1a](https://github.com/user-attachments/assets/d65f1a07-4451-4cb7-8702-00498e285905)
+
 ## Features
 
 - 📊 **GitHub-style Commit Graph** - Visualize your activity with a familiar heatmap
