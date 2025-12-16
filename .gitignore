@@ -19,3 +19,4 @@ Thumbs.db
 # Unnecessary files
 data.json
 *.zip
+releases/
