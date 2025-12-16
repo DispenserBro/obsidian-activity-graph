@@ -1,6 +1,6 @@
 # Activity Graph Plugin for Obsidian
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 🌐 **[Русская версия](README_ru.md)**
