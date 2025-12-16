@@ -35,6 +35,59 @@ export class CalendarSheetRenderer extends BaseRenderer {
         this.endDate = endDate;
         this.container = container;
 
+        // Add custom color styles if customSettings exist
+        if (this.customSettings && this.customSettings.lightTheme && this.customSettings.darkTheme) {
+            container.addClass('custom-colors');
+            const uniqueId = `calendar-sheet-custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            container.setAttribute('data-style-id', uniqueId);
+            
+            const styleEl = document.createElement('style');
+            styleEl.id = `style-${uniqueId}`;
+            const light = this.customSettings.lightTheme;
+            const dark = this.customSettings.darkTheme;
+            
+            let styles = '';
+            
+            // Background colors for dots
+            for (let i = 0; i <= 4; i++) {
+                const bgColor = light[`level${i}` as keyof typeof light];
+                if (bgColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-light .calendar-sheet-dot.level-${i},
+                .theme-light [data-style-id="${uniqueId}"] .calendar-sheet-dot.level-${i} { background-color: ${bgColor} !important; }`;
+                }
+            }
+            for (let i = 0; i <= 4; i++) {
+                const bgColor = dark[`level${i}` as keyof typeof dark];
+                if (bgColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-dark .calendar-sheet-dot.level-${i},
+                .theme-dark [data-style-id="${uniqueId}"] .calendar-sheet-dot.level-${i} { background-color: ${bgColor} !important; }`;
+                }
+            }
+            
+            // Text colors for day numbers
+            for (let i = 0; i <= 4; i++) {
+                const textColor = light[`textLevel${i}` as keyof typeof light];
+                if (textColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-light .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number,
+                .theme-light [data-style-id="${uniqueId}"] .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number { color: ${textColor} !important; }`;
+                }
+            }
+            for (let i = 0; i <= 4; i++) {
+                const textColor = dark[`textLevel${i}` as keyof typeof dark];
+                if (textColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-dark .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number,
+                .theme-dark [data-style-id="${uniqueId}"] .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number { color: ${textColor} !important; }`;
+                }
+            }
+            
+            styleEl.textContent = styles;
+            document.head.appendChild(styleEl);
+        }
+
         // Add global handlers to hide tooltip
         this.addGlobalTooltipHandlers();
 
@@ -148,8 +201,15 @@ export class CalendarSheetRenderer extends BaseRenderer {
             const dateStr = formatDate(currentDate);
             const count = this.activityData[dateStr] || 0;
             const taskStatus = this.tasksStatusData[dateStr];
+            const level = this.getActivityLevel(count);
             
             const dayCell = grid.createEl('div', { cls: 'calendar-sheet-day' });
+            
+            // Add activity level class if there's activity
+            if (count > 0) {
+                dayCell.addClass('has-activity');
+                dayCell.addClass(`level-${level}`);
+            }
 
             // Date number
             const dayNumber = dayCell.createEl('div', { 
@@ -176,7 +236,6 @@ export class CalendarSheetRenderer extends BaseRenderer {
                 const dot = dayCell.createEl('div', { cls: 'calendar-sheet-dot' });
                 
                 // Set color based on activity level
-                const level = this.getActivityLevel(count);
                 dot.addClass(`level-${level}`);
                 
                 // Add position class

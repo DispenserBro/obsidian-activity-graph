@@ -1,6 +1,6 @@
 # Activity Graph Plugin for Obsidian
 
-[![Version](https://img.shields.io/badge/version-1.2.1-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
+[![Version](https://img.shields.io/badge/version-1.2.2-blue)](https://github.com/DispenserBro/obsidian-activity-graph/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 🌐 **[Русская версия](README_ru.md)**
@@ -122,6 +122,24 @@ title: Custom Colors
 colors: ["#ebedf0", "#c6e48b", "#7bc96f", "#449945", "#196127"]
 ```
 ~~~
+
+#### Custom Text Colors
+
+~~~markdown
+```activity-graph
+title: Custom Text Colors
+style: calendar
+colors: ["#161b22", "#0e4429", "#006d32", "#26a641", "#ff0000"]
+textColors: ["#ffffff", "#00ff00", "#ffff00", "#ff8800", "#000000"]
+```
+~~~
+
+Available text color options:
+- `textColors` - Same text colors for both light and dark themes
+- `lightTextColors` - Text colors for light theme only
+- `darkTextColors` - Text colors for dark theme only
+
+**Note:** Text colors work only for Calendar and Calendar Sheet views.
 
 #### Full Example
 

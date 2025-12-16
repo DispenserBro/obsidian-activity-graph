@@ -9,6 +9,9 @@ export interface CodeBlockOptions {
     colors?: string[];
     lightColors?: string[];
     darkColors?: string[];
+    textColors?: string[];
+    lightTextColors?: string[];
+    darkTextColors?: string[];
     start?: string;
     end?: string;
     title?: string;

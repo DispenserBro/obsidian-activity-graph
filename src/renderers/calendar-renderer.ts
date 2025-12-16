@@ -30,6 +30,59 @@ export class CalendarRenderer extends BaseRenderer {
         this.endDate = endDate;
         this.container = container;
         
+        // Add custom color styles if customSettings exist
+        if (this.customSettings && this.customSettings.lightTheme && this.customSettings.darkTheme) {
+            container.addClass('custom-colors');
+            const uniqueId = `calendar-custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            container.setAttribute('data-style-id', uniqueId);
+            
+            const styleEl = document.createElement('style');
+            styleEl.id = `style-${uniqueId}`;
+            const light = this.customSettings.lightTheme;
+            const dark = this.customSettings.darkTheme;
+            
+            let styles = '';
+            
+            // Background colors
+            for (let i = 0; i <= 4; i++) {
+                const bgColor = light[`level${i}` as keyof typeof light];
+                if (bgColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-light .calendar-day.level-${i},
+                .theme-light [data-style-id="${uniqueId}"] .calendar-day.level-${i} { background-color: ${bgColor} !important; }`;
+                }
+            }
+            for (let i = 0; i <= 4; i++) {
+                const bgColor = dark[`level${i}` as keyof typeof dark];
+                if (bgColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-dark .calendar-day.level-${i},
+                .theme-dark [data-style-id="${uniqueId}"] .calendar-day.level-${i} { background-color: ${bgColor} !important; }`;
+                }
+            }
+            
+            // Text colors
+            for (let i = 0; i <= 4; i++) {
+                const textColor = light[`textLevel${i}` as keyof typeof light];
+                if (textColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-light .calendar-day.level-${i},
+                .theme-light [data-style-id="${uniqueId}"] .calendar-day.level-${i} { color: ${textColor} !important; }`;
+                }
+            }
+            for (let i = 0; i <= 4; i++) {
+                const textColor = dark[`textLevel${i}` as keyof typeof dark];
+                if (textColor) {
+                    styles += `
+                [data-style-id="${uniqueId}"] .theme-dark .calendar-day.level-${i},
+                .theme-dark [data-style-id="${uniqueId}"] .calendar-day.level-${i} { color: ${textColor} !important; }`;
+                }
+            }
+            
+            styleEl.textContent = styles;
+            document.head.appendChild(styleEl);
+        }
+        
         // Add global handlers to hide tooltip on scroll/outside click
         this.addGlobalTooltipHandlers();
         

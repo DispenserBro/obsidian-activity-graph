@@ -11,6 +11,41 @@ export class CommitGraphRenderer extends BaseRenderer {
     render(container: HTMLElement, activityData: ActivityData, startDate: Date, endDate: Date): void {
         const firstDayOfWeek = this.getFirstDayOfWeek();
         
+        // Add custom color styles if customSettings exist
+        if (this.customSettings && this.customSettings.lightTheme && this.customSettings.darkTheme) {
+            container.addClass('custom-colors');
+            const uniqueId = `commit-graph-custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            container.setAttribute('data-style-id', uniqueId);
+            
+            const styleEl = document.createElement('style');
+            styleEl.id = `style-${uniqueId}`;
+            const light = this.customSettings.lightTheme;
+            const dark = this.customSettings.darkTheme;
+            styleEl.textContent = `
+                [data-style-id="${uniqueId}"] .theme-light .graph-square.level-0,
+                .theme-light [data-style-id="${uniqueId}"] .graph-square.level-0 { background-color: ${light.level0} !important; }
+                [data-style-id="${uniqueId}"] .theme-light .graph-square.level-1,
+                .theme-light [data-style-id="${uniqueId}"] .graph-square.level-1 { background-color: ${light.level1} !important; }
+                [data-style-id="${uniqueId}"] .theme-light .graph-square.level-2,
+                .theme-light [data-style-id="${uniqueId}"] .graph-square.level-2 { background-color: ${light.level2} !important; }
+                [data-style-id="${uniqueId}"] .theme-light .graph-square.level-3,
+                .theme-light [data-style-id="${uniqueId}"] .graph-square.level-3 { background-color: ${light.level3} !important; }
+                [data-style-id="${uniqueId}"] .theme-light .graph-square.level-4,
+                .theme-light [data-style-id="${uniqueId}"] .graph-square.level-4 { background-color: ${light.level4} !important; }
+                [data-style-id="${uniqueId}"] .theme-dark .graph-square.level-0,
+                .theme-dark [data-style-id="${uniqueId}"] .graph-square.level-0 { background-color: ${dark.level0} !important; }
+                [data-style-id="${uniqueId}"] .theme-dark .graph-square.level-1,
+                .theme-dark [data-style-id="${uniqueId}"] .graph-square.level-1 { background-color: ${dark.level1} !important; }
+                [data-style-id="${uniqueId}"] .theme-dark .graph-square.level-2,
+                .theme-dark [data-style-id="${uniqueId}"] .graph-square.level-2 { background-color: ${dark.level2} !important; }
+                [data-style-id="${uniqueId}"] .theme-dark .graph-square.level-3,
+                .theme-dark [data-style-id="${uniqueId}"] .graph-square.level-3 { background-color: ${dark.level3} !important; }
+                [data-style-id="${uniqueId}"] .theme-dark .graph-square.level-4,
+                .theme-dark [data-style-id="${uniqueId}"] .graph-square.level-4 { background-color: ${dark.level4} !important; }
+            `;
+            document.head.appendChild(styleEl);
+        }
+        
         // Add global handlers to hide tooltip on scroll/outside click
         this.addGlobalTooltipHandlers();
         

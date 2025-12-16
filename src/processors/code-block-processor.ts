@@ -36,8 +36,10 @@ export class CodeBlockProcessor {
                 // Parse array values like [#color1, #color2, ...]
                 if (value.startsWith('[') && value.endsWith(']')) {
                     const arrayContent = value.slice(1, -1);
-                    const arrayValue = arrayContent.split(',').map(s => s.trim());
-                    if (key === 'colors' || key === 'lightColors' || key === 'darkColors') {
+                    // Remove quotes from array values and trim whitespace
+                    const arrayValue = arrayContent.split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+                    if (key === 'colors' || key === 'lightColors' || key === 'darkColors' || 
+                        key === 'textColors' || key === 'lightTextColors' || key === 'darkTextColors') {
                         options[key] = arrayValue;
                     }
                 } else {
@@ -83,6 +85,20 @@ export class CodeBlockProcessor {
             settings.darkTheme.level4 = options.colors[4];
         }
 
+        // Handle custom text colors array (apply to both themes)
+        if (options.textColors && Array.isArray(options.textColors) && options.textColors.length === 5) {
+            settings.lightTheme.textLevel0 = options.textColors[0];
+            settings.lightTheme.textLevel1 = options.textColors[1];
+            settings.lightTheme.textLevel2 = options.textColors[2];
+            settings.lightTheme.textLevel3 = options.textColors[3];
+            settings.lightTheme.textLevel4 = options.textColors[4];
+            settings.darkTheme.textLevel0 = options.textColors[0];
+            settings.darkTheme.textLevel1 = options.textColors[1];
+            settings.darkTheme.textLevel2 = options.textColors[2];
+            settings.darkTheme.textLevel3 = options.textColors[3];
+            settings.darkTheme.textLevel4 = options.textColors[4];
+        }
+
         // Handle separate light/dark theme colors
         if (options.lightColors && Array.isArray(options.lightColors) && options.lightColors.length === 5) {
             settings.lightTheme.level0 = options.lightColors[0];
@@ -99,6 +115,22 @@ export class CodeBlockProcessor {
             settings.darkTheme.level4 = options.darkColors[4];
         }
 
+        // Handle separate light/dark theme text colors
+        if (options.lightTextColors && Array.isArray(options.lightTextColors) && options.lightTextColors.length === 5) {
+            settings.lightTheme.textLevel0 = options.lightTextColors[0];
+            settings.lightTheme.textLevel1 = options.lightTextColors[1];
+            settings.lightTheme.textLevel2 = options.lightTextColors[2];
+            settings.lightTheme.textLevel3 = options.lightTextColors[3];
+            settings.lightTheme.textLevel4 = options.lightTextColors[4];
+        }
+        if (options.darkTextColors && Array.isArray(options.darkTextColors) && options.darkTextColors.length === 5) {
+            settings.darkTheme.textLevel0 = options.darkTextColors[0];
+            settings.darkTheme.textLevel1 = options.darkTextColors[1];
+            settings.darkTheme.textLevel2 = options.darkTextColors[2];
+            settings.darkTheme.textLevel3 = options.darkTextColors[3];
+            settings.darkTheme.textLevel4 = options.darkTextColors[4];
+        }
+
         // Handle custom dates from options
         if (options.start) {
             settings.displayPeriod = 'custom';
@@ -113,7 +145,7 @@ export class CodeBlockProcessor {
         el.addClass('activity-graph-container');
         el.addClass('activity-graph-embed');
         
-        // Apply custom colors
+        // Apply custom colors to the container (parent element)
         this.applyCustomColors(el, settings);
 
         // Render title if provided
