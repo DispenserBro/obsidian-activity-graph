@@ -34,7 +34,7 @@ function build() {
 
 // Create release archive
 async function packageRelease(version) {
-    const outputDir = join(__dirname, 'releases');
+    const outputDir = join(__dirname, 'Builds');
     const archiveName = `activity-graph-${version}.zip`;
     const outputPath = join(outputDir, archiveName);
 
