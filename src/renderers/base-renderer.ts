@@ -1,10 +1,11 @@
 /**
  * Base Renderer - Common functionality for graph renderers
  */
-import { App, TFile } from 'obsidian';
+import { App, TFile, moment } from 'obsidian';
 import { formatDate, getDailyNotesSettings, formatDailyNoteFilename } from '../utils';
 import { t, ts } from '../localization';
 import { ActivityGraphSettings, ActivityGraphPlugin } from '../types';
+import { createDailyNote, getAllDailyNotes, getDailyNote } from 'obsidian-daily-notes-interface';
 
 export class BaseRenderer {
     plugin: ActivityGraphPlugin | null;
@@ -154,72 +155,29 @@ export class BaseRenderer {
      * Open daily note for the given date
      * Uses the Daily Notes plugin settings for path and format
      */
-    async openDailyNote(dateStr) {
+    async openDailyNote(dateStr: string): Promise<void> {
         if (!this.plugin) return;
 
         const app = this.plugin.app;
         
-        // Get Daily Notes plugin settings
-        const dailyNotesSettings = getDailyNotesSettings(app, this.getSettings());
-        
         // Parse the date
-        const date = new Date(dateStr);
+        const date = window.moment(dateStr);
         
-        // Format the filename based on Daily Notes settings
-        const filename = await formatDailyNoteFilename(date, dailyNotesSettings.format);
-        const folder = dailyNotesSettings?.folder || '';
+        // Get all daily notes
+        const dailyNotes = getAllDailyNotes();
         
-        // Build the full path
-        const fullPath = folder ? `${folder}/${filename}.md` : `${filename}.md`;
+        // Check if daily note exists
+        let file = getDailyNote(date, dailyNotes);
         
-        // Check if file exists
-        const file = app.vault.getAbstractFileByPath(fullPath);
-        
-        if (file) {
-            // Open existing file
-            await app.workspace.openLinkText(fullPath, '', false);
-        } else {
-            // Create and open new file
-            await this.createAndOpenDailyNote(app, fullPath, date, dailyNotesSettings);
+        if (!file) {
+            // Create new daily note using Daily Notes API (this will apply templates)
+            file = await createDailyNote(date);
         }
-    }
-
-    /**
-     * Create and open a new daily note
-     */
-    async createAndOpenDailyNote(app, fullPath, date, settings) {
-        try {
-            // Ensure folder exists
-            const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
-            if (folderPath) {
-                const folder = app.vault.getAbstractFileByPath(folderPath);
-                if (!folder) {
-                    await app.vault.createFolder(folderPath);
-                }
-            }
-
-            // Get template content if available
-            let content = '';
-            if (settings?.template) {
-                const templateFile = app.vault.getAbstractFileByPath(settings.template + '.md') ||
-                                    app.vault.getAbstractFileByPath(settings.template);
-                if (templateFile) {
-                    content = await app.vault.read(templateFile);
-                    // Replace template variables using moment.js with locale
-                    const dateFormatted = await formatDailyNoteFilename(date, settings.format);
-                    content = content
-                        .replace(/{{date}}/g, dateFormatted)
-                        .replace(/{{title}}/g, dateFormatted);
-                }
-            }
-
-            // Create the file
-            await app.vault.create(fullPath, content);
-            
-            // Open the file
-            await app.workspace.openLinkText(fullPath, '', false);
-        } catch (error) {
-            console.error('Error creating daily note:', error);
+        
+        // Open the file
+        if (file) {
+            const leaf = app.workspace.getLeaf(false);
+            await leaf.openFile(file);
         }
     }
 
