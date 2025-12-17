@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { App } from 'obsidian';
 import { ActivityGraphSettings } from './types/ActivityGraphSettings';
 import { DailyNotesSettings } from './types/DailyNotesSettings';
@@ -70,10 +69,10 @@ export function getDailyNotesSettings(app: App, customSettings?: Partial<Activit
 /**
  * Format daily note filename based on date and format string
  */
-export async function formatDailyNoteFilename(date: Date, format: string): Promise<string> {
+export function formatDailyNoteFilename(date: Date, format: string): string {
     // Moment locale is already set globally in initLocale()
     // Just format the date with the current locale
-    return moment(date).format(format || 'YYYY-MM-DD');
+    return window.moment(date).format(format || 'YYYY-MM-DD');
 }
 
 /**
@@ -82,7 +81,7 @@ export async function formatDailyNoteFilename(date: Date, format: string): Promi
 export async function getDailyNotePath(app: App, customSettings?: Partial<ActivityGraphSettings>, previewDate: Date | null = null): Promise<string> {
     const settings = getDailyNotesSettings(app, customSettings);
     const date = previewDate || new Date();
-    const filename = await formatDailyNoteFilename(date, settings.format || 'YYYY-MM-DD');
+    const filename = formatDailyNoteFilename(date, settings.format || 'YYYY-MM-DD');
     const folder = settings.folder || '';
     
     return folder ? `${folder}/${filename}.md` : `${filename}.md`;

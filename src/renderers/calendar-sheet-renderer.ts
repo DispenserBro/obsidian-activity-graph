@@ -37,55 +37,30 @@ export class CalendarSheetRenderer extends BaseRenderer {
 
         // Add custom color styles if customSettings exist
         if (this.customSettings && this.customSettings.lightTheme && this.customSettings.darkTheme) {
-            container.addClass('custom-colors');
-            const uniqueId = `calendar-sheet-custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            container.setAttribute('data-style-id', uniqueId);
-            
-            const styleEl = document.createElement('style');
-            styleEl.id = `style-${uniqueId}`;
             const light = this.customSettings.lightTheme;
             const dark = this.customSettings.darkTheme;
             
-            let styles = '';
-            
-            // Background colors for dots
+            // Set CSS variables for custom colors
             for (let i = 0; i <= 4; i++) {
                 const bgColor = light[`level${i}` as keyof typeof light];
                 if (bgColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-light .calendar-sheet-dot.level-${i},
-                .theme-light [data-style-id="${uniqueId}"] .calendar-sheet-dot.level-${i} { background-color: ${bgColor} !important; }`;
+                    container.style.setProperty(`--activity-light-level-${i}`, bgColor);
+                }
+                const textColor = light[`textLevel${i}` as keyof typeof light];
+                if (textColor) {
+                    container.style.setProperty(`--activity-light-text-level-${i}`, textColor);
                 }
             }
             for (let i = 0; i <= 4; i++) {
                 const bgColor = dark[`level${i}` as keyof typeof dark];
                 if (bgColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-dark .calendar-sheet-dot.level-${i},
-                .theme-dark [data-style-id="${uniqueId}"] .calendar-sheet-dot.level-${i} { background-color: ${bgColor} !important; }`;
+                    container.style.setProperty(`--activity-dark-level-${i}`, bgColor);
                 }
-            }
-            
-            // Text colors for day numbers
-            for (let i = 0; i <= 4; i++) {
-                const textColor = light[`textLevel${i}` as keyof typeof light];
-                if (textColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-light .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number,
-                .theme-light [data-style-id="${uniqueId}"] .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number { color: ${textColor} !important; }`;
-                }
-            }
-            for (let i = 0; i <= 4; i++) {
                 const textColor = dark[`textLevel${i}` as keyof typeof dark];
                 if (textColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-dark .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number,
-                .theme-dark [data-style-id="${uniqueId}"] .calendar-sheet-day.has-activity.level-${i} .calendar-sheet-day-number { color: ${textColor} !important; }`;
+                    container.style.setProperty(`--activity-dark-text-level-${i}`, textColor);
                 }
             }
-            
-            styleEl.textContent = styles;
-            document.head.appendChild(styleEl);
         }
 
         // Add global handlers to hide tooltip
@@ -118,7 +93,7 @@ export class CalendarSheetRenderer extends BaseRenderer {
             cls: 'calendar-sheet-nav-btn',
             attr: { 'aria-label': ts('navPrevMonth') }
         });
-        prevBtn.innerHTML = '‹';
+        prevBtn.textContent = '‹';
         prevBtn.addEventListener('click', () => this.navigateMonth(-1));
         
         if (this.currentMonthIndex <= 0) {
@@ -137,7 +112,7 @@ export class CalendarSheetRenderer extends BaseRenderer {
             cls: 'calendar-sheet-nav-btn',
             attr: { 'aria-label': ts('navNextMonth') }
         });
-        nextBtn.innerHTML = '›';
+        nextBtn.textContent = '›';
         nextBtn.addEventListener('click', () => this.navigateMonth(1));
         
         if (this.currentMonthIndex >= this.months.length - 1) {
@@ -188,7 +163,7 @@ export class CalendarSheetRenderer extends BaseRenderer {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         // Calculate offset for first day
-        let offset = (firstDayOfMonth - firstDay + 7) % 7;
+        const offset = (firstDayOfMonth - firstDay + 7) % 7;
 
         // Empty cells before month starts
         for (let i = 0; i < offset; i++) {

@@ -57,8 +57,8 @@ export class CodeBlockProcessor {
         // Create merged settings with options overriding defaults
         const settings: ActivityGraphSettings = {
             ...this.plugin.settings,
-            displayPeriod: options.period as any || this.plugin.settings.displayPeriod,
-            displayStyle: options.style as any || this.plugin.settings.displayStyle,
+            displayPeriod: (options.period as ActivityGraphSettings['displayPeriod']) || this.plugin.settings.displayPeriod,
+            displayStyle: (options.style as ActivityGraphSettings['displayStyle']) || this.plugin.settings.displayStyle,
             displayOnlyTasks: options.tasks === 'true' || 
                 (options.tasks !== 'false' && this.plugin.settings.displayOnlyTasks),
             // Deep copy color schemes to avoid mutating original
@@ -151,7 +151,8 @@ export class CodeBlockProcessor {
         // Render title if provided
         if (options.title) {
             const header = el.createEl('div', { cls: 'activity-graph-header' });
-            header.createEl('h4', { text: options.title });
+            const heading = header.createEl('h4');
+            heading.textContent = options.title;
         }
 
         const graphContainer = el.createEl('div', { cls: 'activity-graph' });

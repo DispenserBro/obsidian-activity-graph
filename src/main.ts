@@ -29,7 +29,6 @@ export default class ActivityGraphPlugin extends Plugin {
     }
 
     async onload(): Promise<void> {
-        console.log('Loading Activity Graph plugin');
         
         // Initialize localization
         await initLocale(this.app);
@@ -48,13 +47,13 @@ export default class ActivityGraphPlugin extends Plugin {
         const codeBlockProcessor = new CodeBlockProcessor(this);
         codeBlockProcessor.register();
         
-        this.addRibbonIcon('bar-chart', 'Open Activity Graph', () => {
+        this.addRibbonIcon('bar-chart', 'Open activity graph', () => {
             this.activateView();
         });
         
         this.addCommand({
-            id: 'open-activity-graph',
-            name: 'Open Activity Graph',
+            id: 'open',
+            name: 'Open',
             callback: () => {
                 this.activateView();
             }
@@ -150,7 +149,6 @@ export default class ActivityGraphPlugin extends Plugin {
     }
 
     async onunload() {
-        console.log('Unloading Activity Graph plugin');
         await this.saveActivityData();
     }
 }

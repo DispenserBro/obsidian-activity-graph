@@ -2,9 +2,9 @@
  * Settings Tab - Plugin configuration UI
  */
 import { PluginSettingTab, App, Setting } from 'obsidian';
-import { t, ts } from '../localization';
+import { ts } from '../localization';
 import { getDailyNotePath } from '../utils';
-import type { ActivityGraphPlugin } from '../types';
+import type { ActivityGraphPlugin, ActivityGraphSettings } from '../types';
 
 export class ActivityGraphSettingTab extends PluginSettingTab {
     private plugin: ActivityGraphPlugin;
@@ -36,7 +36,9 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl('h2', { text: ts('settingsTitle') });
+        new Setting(containerEl)
+            .setName(ts('settingsTitle'))
+            .setHeading();
 
         // Highlight Today Setting
         new Setting(containerEl)
@@ -113,8 +115,8 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     .addOption('bottom-left', ts('positionBottomLeft'))
                     .addOption('bottom-right', ts('positionBottomRight'))
                     .setValue(this.plugin.settings.activityDotPosition)
-                    .onChange(async (value) => {
-                        this.plugin.settings.activityDotPosition = value as any;
+                    .onChange(async (value: ActivityGraphSettings['activityDotPosition']) => {
+                        this.plugin.settings.activityDotPosition = value;
                         await this.plugin.saveSettings();
                         this.plugin.updateView();
                     }));
@@ -135,7 +137,9 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 }));
 
         // Daily Notes Settings Section
-        containerEl.createEl('h3', { text: ts('settingDailyNotes') });
+        new Setting(containerEl)
+            .setName(ts('settingDailyNotes'))
+            .setHeading();
 
         // Use Daily Notes Plugin Setting
         const previewPath = await getDailyNotePath(this.app, this.plugin.settings);
@@ -232,7 +236,9 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
 
         // Custom Date Fields
         if (this.plugin.settings.displayPeriod === 'custom') {
-            containerEl.createEl('h3', { text: ts('settingCustomDateRange') });
+            new Setting(containerEl)
+                .setName(ts('settingCustomDateRange'))
+                .setHeading();
 
             const startDateSetting = new Setting(containerEl)
                 .setName(ts('settingStartDate'))
@@ -273,7 +279,9 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         colorsSummary.createEl('span', { text: ts('settingActivityColors') });
 
         // Light Theme Colors
-        colorsSection.createEl('h4', { text: ts('settingLightTheme'), cls: 'activity-colors-subheader' });
+        new Setting(colorsSection)
+            .setName(ts('settingLightTheme'))
+            .setHeading();
         this.renderColorSetting(colorsSection, ts('settingLevel0'), 'lightLevel0');
         this.renderColorSetting(colorsSection, ts('settingLevel1'), 'lightLevel1');
         this.renderColorSetting(colorsSection, ts('settingLevel2'), 'lightLevel2');
@@ -281,7 +289,9 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         this.renderColorSetting(colorsSection, ts('settingLevel4'), 'lightLevel4');
 
         // Dark Theme Colors
-        colorsSection.createEl('h4', { text: ts('settingDarkTheme'), cls: 'activity-colors-subheader' });
+        new Setting(colorsSection)
+            .setName(ts('settingDarkTheme'))
+            .setHeading();
         this.renderColorSetting(colorsSection, ts('settingLevel0'), 'darkLevel0');
         this.renderColorSetting(colorsSection, ts('settingLevel1'), 'darkLevel1');
         this.renderColorSetting(colorsSection, ts('settingLevel2'), 'darkLevel2');

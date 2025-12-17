@@ -1,8 +1,7 @@
 /**
  * Base Renderer - Common functionality for graph renderers
  */
-import { App, TFile, moment } from 'obsidian';
-import { formatDate, getDailyNotesSettings, formatDailyNoteFilename } from '../utils';
+import { formatDate } from '../utils';
 import { t, ts } from '../localization';
 import { ActivityGraphSettings, ActivityGraphPlugin } from '../types';
 import { createDailyNote, getAllDailyNotes, getDailyNote } from 'obsidian-daily-notes-interface';

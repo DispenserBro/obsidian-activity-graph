@@ -4,7 +4,7 @@
 import { BaseRenderer } from './base-renderer';
 import { formatDate, getActivityLevel, getMonthsInRange } from '../utils';
 import { getMonthFull, getDaysShort, ts } from '../localization';
-import type { ActivityData, CalendarDate, ActivityGraphPlugin } from '../types';
+import type { ActivityData, ActivityGraphPlugin } from '../types';
 import type { ActivityGraphSettings } from '../types';
 
 export class CalendarRenderer extends BaseRenderer {
@@ -32,55 +32,30 @@ export class CalendarRenderer extends BaseRenderer {
         
         // Add custom color styles if customSettings exist
         if (this.customSettings && this.customSettings.lightTheme && this.customSettings.darkTheme) {
-            container.addClass('custom-colors');
-            const uniqueId = `calendar-custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            container.setAttribute('data-style-id', uniqueId);
-            
-            const styleEl = document.createElement('style');
-            styleEl.id = `style-${uniqueId}`;
             const light = this.customSettings.lightTheme;
             const dark = this.customSettings.darkTheme;
             
-            let styles = '';
-            
-            // Background colors
+            // Set CSS variables for custom colors
             for (let i = 0; i <= 4; i++) {
                 const bgColor = light[`level${i}` as keyof typeof light];
                 if (bgColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-light .calendar-day.level-${i},
-                .theme-light [data-style-id="${uniqueId}"] .calendar-day.level-${i} { background-color: ${bgColor} !important; }`;
+                    container.style.setProperty(`--activity-light-level-${i}`, bgColor);
+                }
+                const textColor = light[`textLevel${i}` as keyof typeof light];
+                if (textColor) {
+                    container.style.setProperty(`--activity-light-text-level-${i}`, textColor);
                 }
             }
             for (let i = 0; i <= 4; i++) {
                 const bgColor = dark[`level${i}` as keyof typeof dark];
                 if (bgColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-dark .calendar-day.level-${i},
-                .theme-dark [data-style-id="${uniqueId}"] .calendar-day.level-${i} { background-color: ${bgColor} !important; }`;
+                    container.style.setProperty(`--activity-dark-level-${i}`, bgColor);
                 }
-            }
-            
-            // Text colors
-            for (let i = 0; i <= 4; i++) {
-                const textColor = light[`textLevel${i}` as keyof typeof light];
-                if (textColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-light .calendar-day.level-${i},
-                .theme-light [data-style-id="${uniqueId}"] .calendar-day.level-${i} { color: ${textColor} !important; }`;
-                }
-            }
-            for (let i = 0; i <= 4; i++) {
                 const textColor = dark[`textLevel${i}` as keyof typeof dark];
                 if (textColor) {
-                    styles += `
-                [data-style-id="${uniqueId}"] .theme-dark .calendar-day.level-${i},
-                .theme-dark [data-style-id="${uniqueId}"] .calendar-day.level-${i} { color: ${textColor} !important; }`;
+                    container.style.setProperty(`--activity-dark-text-level-${i}`, textColor);
                 }
             }
-            
-            styleEl.textContent = styles;
-            document.head.appendChild(styleEl);
         }
         
         // Add global handlers to hide tooltip on scroll/outside click
@@ -128,7 +103,7 @@ export class CalendarRenderer extends BaseRenderer {
                 cls: 'calendar-nav-btn calendar-nav-prev',
                 attr: { 'aria-label': ts('navPrevMonth') }
             });
-            leftArrow.innerHTML = '‹';
+            leftArrow.textContent = '‹';
             leftArrow.disabled = this.currentMonthIndex === 0;
             leftArrow.addEventListener('click', () => this.navigateMonth(-1));
         }
@@ -144,7 +119,7 @@ export class CalendarRenderer extends BaseRenderer {
                 cls: 'calendar-nav-btn calendar-nav-next',
                 attr: { 'aria-label': ts('navNextMonth') }
             });
-            rightArrow.innerHTML = '›';
+            rightArrow.textContent = '›';
             rightArrow.disabled = this.currentMonthIndex === this.months.length - 1;
             rightArrow.addEventListener('click', () => this.navigateMonth(1));
         }

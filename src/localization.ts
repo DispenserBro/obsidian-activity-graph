@@ -5,19 +5,15 @@ import Polyglot from 'node-polyglot';
 import { App } from 'obsidian';
 import { getLocale as getLocaleTranslations, isLocaleAvailable } from './locales/index';
 import type { LocaleStrings } from './types/LocaleStrings';
-import moment from 'moment';
 // Load all moment locales
 import 'moment/min/locales';
 
 // Polyglot options interface
-interface PolyglotOptions {
-    smart_count?: number;
-    [key: string]: string | number | boolean | undefined;
-}
+type PolyglotOptions = Polyglot.InterpolationOptions;
 
 // Current locale and Polyglot instance
 let currentLocale: string = 'en';
-let polyglot: Polyglot | null = null;
+let polyglot: InstanceType<typeof Polyglot> | null = null;
 let currentPhrases: LocaleStrings | null = null; // Store original phrases
 
 /**
@@ -48,11 +44,11 @@ export async function initLocale(app: App): Promise<string> {
     // Initialize Polyglot
     polyglot = new Polyglot({
         locale: currentLocale,
-        phrases: phrases as any // Polyglot expects Record<string, string>
+        phrases: phrases as unknown as Record<string, string> // Polyglot expects Record<string, string>
     });
     
     // Set moment.js locale
-    await setMomentLocale(baseLang);
+    setMomentLocale(baseLang);
     
     return currentLocale;
 }
@@ -60,10 +56,10 @@ export async function initLocale(app: App): Promise<string> {
 /**
  * Set moment.js locale
  */
-async function setMomentLocale(locale: string): Promise<void> {
+function setMomentLocale(locale: string): void {
     // All locales are already loaded via 'moment/min/locales'
     // Just set the locale
-    moment.locale(locale);
+    window.moment.locale(locale);
 }
 
 /**
@@ -76,7 +72,7 @@ export function t(key: string, options: PolyglotOptions = {}): string | string[]
     }
     
     // Get the phrase from original object
-    const phrase = (currentPhrases as any)[key];
+    const phrase = currentPhrases[key as keyof LocaleStrings];
     
     // If phrase is undefined, return key
     if (phrase === undefined) {

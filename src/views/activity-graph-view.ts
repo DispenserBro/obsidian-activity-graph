@@ -46,7 +46,8 @@ export class ActivityGraphView extends ItemView {
         const title = (this.plugin.settings.displayOnlyTasks && this.plugin.isTasksPluginEnabled())
             ? ts('tasksGraphTitle') 
             : ts('activityGraphTitle');
-        header.createEl('h4', { text: title });
+        const heading = header.createEl('h4');
+        heading.textContent = title;
         
         const graphContainer = container.createEl('div', { cls: 'activity-graph' });
         

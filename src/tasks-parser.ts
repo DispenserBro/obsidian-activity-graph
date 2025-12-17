@@ -1,7 +1,6 @@
-import { Vault, TFile } from 'obsidian';
+import { Vault, App } from 'obsidian';
 import { ActivityData } from './types/ActivityData';
-import { TasksStatusData, DayTasksStatus } from './types/DayTasksStatus';
-import { getDailyNotesSettings, formatDailyNoteFilename } from './utils';
+import { TasksStatusData } from './types/DayTasksStatus';
 
 /**
  * Extract completed task dates from file content
@@ -65,8 +64,8 @@ export async function loadTasksFromVault(vault: Vault): Promise<ActivityData> {
                 }
                 tasksData[date]++;
             }
-        } catch (error) {
-            console.error(`Error reading file ${file.path}:`, error);
+        } catch {
+            // Silently ignore errors reading files
         }
     }
     
@@ -110,10 +109,9 @@ function analyzeFileTasks(content: string): { hasCompleted: boolean; hasIncomple
  */
 export async function loadTasksStatusFromDailyNotes(
     vault: Vault,
-    app: any
+    app: App
 ): Promise<TasksStatusData> {
     const statusData: TasksStatusData = {};
-    const settings = getDailyNotesSettings(app);
     const files = vault.getMarkdownFiles();
     
     for (const file of files) {
@@ -133,8 +131,8 @@ export async function loadTasksStatusFromDailyNotes(
                     hasIncompleteTasks: hasIncomplete
                 };
             }
-        } catch (error) {
-            console.error(`Error analyzing file ${file.path}:`, error);
+        } catch {
+            // Silently ignore errors analyzing files
         }
     }
     
