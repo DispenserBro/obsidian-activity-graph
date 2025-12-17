@@ -31,7 +31,7 @@ export default class ActivityGraphPlugin extends Plugin {
     async onload(): Promise<void> {
         
         // Initialize localization
-        await initLocale(this.app);
+        initLocale(this.app);
         
         await this.loadSettings();
         await this.loadActivityData();
@@ -48,14 +48,14 @@ export default class ActivityGraphPlugin extends Plugin {
         codeBlockProcessor.register();
         
         this.addRibbonIcon('bar-chart', 'Open activity graph', () => {
-            this.activateView();
+            void this.activateView();
         });
         
         this.addCommand({
             id: 'open',
             name: 'Open',
             callback: () => {
-                this.activateView();
+                void this.activateView();
             }
         });
         
@@ -72,7 +72,7 @@ export default class ActivityGraphPlugin extends Plugin {
         );
         
         this.registerInterval(
-            window.setInterval(() => this.saveActivityData(), 60000)
+            window.setInterval(() => void this.saveActivityData(), 60000)
         );
     }
 
@@ -143,7 +143,7 @@ export default class ActivityGraphPlugin extends Plugin {
         const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_ACTIVITY_GRAPH);
         leaves.forEach(leaf => {
             if (leaf.view instanceof ActivityGraphView) {
-                leaf.view.onOpen();
+                void leaf.view.onOpen();
             }
         });
     }

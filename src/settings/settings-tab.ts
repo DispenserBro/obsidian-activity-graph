@@ -20,19 +20,23 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
     
     private async updatePathPreview(): Promise<void> {
         if (this.pathPreviewSpan) {
-            const previewPath = await getDailyNotePath(this.app, this.plugin.settings);
+            const previewPath = getDailyNotePath(this.app, this.plugin.settings);
             this.pathPreviewSpan.setText(previewPath);
         }
     }
     
     private async updateFormatPreview(): Promise<void> {
         if (this.formatPreviewSpan) {
-            const previewPath = await getDailyNotePath(this.app, this.plugin.settings);
+            const previewPath = getDailyNotePath(this.app, this.plugin.settings);
             this.formatPreviewSpan.setText(previewPath);
         }
     }
 
-    async display() {
+    display() {
+        void this.renderSettings();
+    }
+
+    private async renderSettings() {
         const { containerEl } = this;
         containerEl.empty();
 
@@ -49,7 +53,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.highlightToday = value;
                     await this.plugin.saveSettings();
-                    this.display();
+                    void this.display();
                     this.plugin.updateView();
                 }));
 
@@ -64,12 +68,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 cls: 'activity-color-input'
             });
             colorInput.value = this.plugin.settings.highlightColor;
-            colorInput.addEventListener('change', async (e) => {
+            colorInput.addEventListener('change', (e) => void (async () => {
                 const target = e.target as HTMLInputElement;
                 this.plugin.settings.highlightColor = target.value;
                 await this.plugin.saveSettings();
                 this.plugin.updateView();
-            });
+            })());
         }
 
         // Display Only Tasks Setting (only show if Tasks plugin is installed)
@@ -100,7 +104,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     await this.plugin.saveSettings();
                     this.plugin.updateView();
                     // Refresh display to show/hide activity dot position setting
-                    this.display();
+                    void this.display();
                 }));
 
         // Activity Dot Position Setting (only for calendar-sheet)
@@ -142,7 +146,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
             .setHeading();
 
         // Use Daily Notes Plugin Setting
-        const previewPath = await getDailyNotePath(this.app, this.plugin.settings);
+        const previewPath = getDailyNotePath(this.app, this.plugin.settings);
         const useDailyNotesDescFrag = document.createDocumentFragment();
         useDailyNotesDescFrag.appendText(ts('settingUseDailyNotesPluginDesc'));
         useDailyNotesDescFrag.createEl('br');
@@ -160,7 +164,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.useDailyNotesPlugin = value;
                     await this.plugin.saveSettings();
-                    this.display();
+                    void this.display();
                 }));
 
         // Custom Daily Notes Path (only shown when not using plugin settings)
@@ -180,12 +184,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                             window.clearTimeout(this.updatePathPreviewDebounce);
                         }
                         this.updatePathPreviewDebounce = window.setTimeout(() => {
-                            this.updatePathPreview();
-                            this.updateFormatPreview();
+                            void this.updatePathPreview();
+                            void this.updateFormatPreview();
                         }, 300);
                     }));
 
-            const formatPreviewPath = await getDailyNotePath(this.app, this.plugin.settings);
+            const formatPreviewPath = getDailyNotePath(this.app, this.plugin.settings);
             const formatDescFrag = document.createDocumentFragment();
             formatDescFrag.appendText(ts('settingCustomDailyNotesFormatDesc'));
             formatDescFrag.createEl('br');
@@ -210,8 +214,8 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                             window.clearTimeout(this.updateFormatPreviewDebounce);
                         }
                         this.updateFormatPreviewDebounce = window.setTimeout(() => {
-                            this.updatePathPreview();
-                            this.updateFormatPreview();
+                            void this.updatePathPreview();
+                            void this.updateFormatPreview();
                         }, 300);
                     }));
         }
@@ -230,7 +234,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.displayPeriod = value as typeof this.plugin.settings.displayPeriod;
                     await this.plugin.saveSettings();
-                    this.display();
+                    void this.display();
                     this.plugin.updateView();
                 }));
 
@@ -249,12 +253,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 cls: 'activity-date-input'
             });
             startDateInput.value = this.plugin.settings.customStartDate;
-            startDateInput.addEventListener('change', async (e) => {
+            startDateInput.addEventListener('change', (e) => void (async () => {
                 const target = e.target as HTMLInputElement;
                 this.plugin.settings.customStartDate = target.value;
                 await this.plugin.saveSettings();
                 this.plugin.updateView();
-            });
+            })());
 
             const endDateSetting = new Setting(containerEl)
                 .setName(ts('settingEndDate'))
@@ -265,12 +269,12 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 cls: 'activity-date-input'
             });
             endDateInput.value = this.plugin.settings.customEndDate;
-            endDateInput.addEventListener('change', async (e) => {
+            endDateInput.addEventListener('change', (e) => void (async () => {
                 const target = e.target as HTMLInputElement;
                 this.plugin.settings.customEndDate = target.value;
                 await this.plugin.saveSettings();
                 this.plugin.updateView();
-            });
+            })());
         }
 
         // Activity Colors Section - Collapsible
@@ -316,7 +320,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                     this.plugin.settings.darkTheme.level3 = '#26a641';
                     this.plugin.settings.darkTheme.level4 = '#39d353';
                     await this.plugin.saveSettings();
-                    this.display();
+                    void this.display();
                     this.plugin.updateView();
                 }));
     }
@@ -337,11 +341,11 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         const levelKey = `level${levelNum}` as keyof typeof theme;
         
         colorInput.value = theme[levelKey];
-        colorInput.addEventListener('change', async (e) => {
+        colorInput.addEventListener('change', (e) => void (async () => {
             const target = e.target as HTMLInputElement;
             theme[levelKey] = target.value;
             await this.plugin.saveSettings();
             this.plugin.updateView();
-        });
+        })());
     }
 }

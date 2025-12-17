@@ -78,7 +78,7 @@ export function formatDailyNoteFilename(date: Date, format: string): string {
 /**
  * Get example daily note path for preview
  */
-export async function getDailyNotePath(app: App, customSettings?: Partial<ActivityGraphSettings>, previewDate: Date | null = null): Promise<string> {
+export function getDailyNotePath(app: App, customSettings?: Partial<ActivityGraphSettings>, previewDate: Date | null = null): string {
     const settings = getDailyNotesSettings(app, customSettings);
     const date = previewDate || new Date();
     const filename = formatDailyNoteFilename(date, settings.format || 'YYYY-MM-DD');

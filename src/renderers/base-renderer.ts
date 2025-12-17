@@ -64,7 +64,9 @@ export class BaseRenderer {
         
         const tooltip = document.createElement('div');
         tooltip.addClass('activity-tooltip');
-        tooltip.textContent = `${count} ${t('tooltipActivities')} ${date}`;
+        const tooltipText = t('tooltipActivities');
+        const activitiesLabel = Array.isArray(tooltipText) ? tooltipText[0] : tooltipText;
+        tooltip.textContent = `${count} ${activitiesLabel} ${date}`;
         
         const rect = element.getBoundingClientRect();
         tooltip.style.left = rect.left + 'px';
@@ -146,7 +148,7 @@ export class BaseRenderer {
         // Hide tooltip when element is clicked
         element.addEventListener('click', () => {
             this.hideTooltip();
-            this.openDailyNote(dateStr);
+            void this.openDailyNote(dateStr);
         });
     }
 

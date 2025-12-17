@@ -19,7 +19,7 @@ let currentPhrases: LocaleStrings | null = null; // Store original phrases
 /**
  * Initialize locale from Obsidian settings
  */
-export async function initLocale(app: App): Promise<string> {
+export function initLocale(app: App): string {
     // Get language from Obsidian's settings
     interface VaultWithConfig {
         config?: {
