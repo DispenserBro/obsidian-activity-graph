@@ -27,9 +27,9 @@ export const STRINGS_EN: LocaleStrings = {
     dayLabels: ['Mon', 'Wed', 'Fri'],
     
     // Settings
-    settingsTitle: 'Activity Graph Settings',
+    settingsTitle: 'Activity Graph',
     
-    settingHighlightToday: 'Highlight Today',
+    settingHighlightToday: 'Highlight current day',
     settingHighlightTodayDesc: 'Add a visual highlight to the current day on the graph',
     
     settingHighlightColor: 'Highlight Color',
@@ -84,7 +84,7 @@ export const STRINGS_EN: LocaleStrings = {
     firstDayMonday: 'Monday',
     
     // Daily Notes settings
-    settingDailyNotes: 'Daily Notes Settings',
+    settingDailyNotes: 'Daily Notes Integration',
     settingUseDailyNotesPlugin: 'Use Daily Notes Plugin Settings',
     settingUseDailyNotesPluginDesc: 'Use settings from Daily Notes plugin, or configure custom path and format',
     settingCustomDailyNotesPath: 'Custom Daily Notes Path',

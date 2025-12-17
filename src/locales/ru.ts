@@ -27,9 +27,9 @@ export const STRINGS_RU: LocaleStrings = {
     dayLabels: ['Пн', 'Ср', 'Пт'],
     
     // Settings
-    settingsTitle: 'Настройки графика активности',
+    settingsTitle: 'График активности',
     
-    settingHighlightToday: 'Подсветка сегодня',
+    settingHighlightToday: 'Подсветка текущего дня',
     settingHighlightTodayDesc: 'Добавить визуальную подсветку текущего дня на графике',
     
     settingHighlightColor: 'Цвет подсветки',
@@ -84,7 +84,7 @@ export const STRINGS_RU: LocaleStrings = {
     firstDayMonday: 'Понедельник',
     
     // Daily Notes settings
-    settingDailyNotes: 'Настройки ежедневных заметок',
+    settingDailyNotes: 'Интеграция с ежедневными заметками',
     settingUseDailyNotesPlugin: 'Использовать настройки плагина Daily Notes',
     settingUseDailyNotesPluginDesc: 'Использовать настройки плагина Daily Notes или задать свой путь и формат',
     settingCustomDailyNotesPath: 'Произвольный путь к ежедневным заметкам',

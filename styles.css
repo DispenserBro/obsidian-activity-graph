@@ -1,0 +1,786 @@
+/* Auto-generated from src/styles - DO NOT EDIT DIRECTLY */
+
+/* === base.css === */
+/* ===================================
+   Base Styles - Container & Header
+   =================================== */
+
+/* Activity Graph Container */
+.activity-graph-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.activity-graph {
+    min-width: fit-content;
+}
+
+.activity-graph-header {
+    margin-bottom: 20px;
+}
+
+.activity-graph-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+/* Scrollbar styling */
+.activity-graph-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.activity-graph-container::-webkit-scrollbar-track {
+    background: var(--background-primary);
+}
+
+.activity-graph-container::-webkit-scrollbar-thumb {
+    background: var(--background-modifier-border);
+    border-radius: 4px;
+}
+
+.activity-graph-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Embedded Graph in Notes */
+.activity-graph-embed {
+    background: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin: 10px 0;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.activity-graph-embed .activity-graph {
+    display: inline-block;
+}
+
+
+/* === commit-graph.css === */
+/* ===================================
+   Commit Graph Styles
+   =================================== */
+
+/* Graph Months */
+.graph-months {
+    display: flex;
+    margin-bottom: 5px;
+    margin-left: 35px;
+    position: relative;
+    height: 16px;
+}
+
+.month-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    position: absolute;
+    white-space: nowrap;
+}
+
+/* Graph Wrapper */
+.graph-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+/* Day Labels */
+.graph-days {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-right: 8px;
+    flex-shrink: 0;
+    min-width: 25px;
+}
+
+.day-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    height: 12px;
+    line-height: 12px;
+    display: flex;
+    align-items: center;
+}
+
+/* Weeks Container */
+.graph-weeks {
+    display: flex;
+    gap: 3px;
+}
+
+.graph-week {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Graph Squares */
+.graph-square {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.graph-square:hover {
+    outline: 2px solid var(--text-muted);
+    outline-offset: 0;
+    transform: scale(1.1);
+}
+
+.graph-square:active {
+    transform: scale(0.95);
+}
+
+/* Today Highlight - Commit Graph */
+.graph-square.today {
+    outline: 2px solid;
+    outline-offset: 0;
+}
+
+.graph-square.today:hover {
+    outline: 2px solid;
+    outline-offset: 0;
+    transform: scale(1.1);
+}
+
+/* Activity Levels - Light Theme */
+.theme-light .graph-square.level-0 {
+    background-color: var(--activity-light-level-0, #ebedf0);
+}
+
+.theme-light .graph-square.level-1 {
+    background-color: var(--activity-light-level-1, #9be9a8);
+}
+
+.theme-light .graph-square.level-2 {
+    background-color: var(--activity-light-level-2, #40c463);
+}
+
+.theme-light .graph-square.level-3 {
+    background-color: var(--activity-light-level-3, #30a14e);
+}
+
+.theme-light .graph-square.level-4 {
+    background-color: var(--activity-light-level-4, #216e39);
+}
+
+/* Activity Levels - Dark Theme */
+.theme-dark .graph-square.level-0 {
+    background-color: var(--activity-dark-level-0, #161b22);
+}
+
+.theme-dark .graph-square.level-1 {
+    background-color: var(--activity-dark-level-1, #0e4429);
+}
+
+.theme-dark .graph-square.level-2 {
+    background-color: var(--activity-dark-level-2, #006d32);
+}
+
+.theme-dark .graph-square.level-3 {
+    background-color: var(--activity-dark-level-3, #26a641);
+}
+
+.theme-dark .graph-square.level-4 {
+    background-color: var(--activity-dark-level-4, #39d353);
+}
+
+
+/* === calendar.css === */
+/* ===================================
+   Calendar Styles
+   =================================== */
+
+.calendar-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+/* Compact mode for embedded calendar (code blocks) */
+.activity-graph-embed .calendar-container {
+    justify-content: center;
+}
+
+.calendar-month-card {
+    background: var(--background-secondary);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 220px;
+    border: 1px solid var(--background-modifier-border);
+}
+
+/* Wider cards in compact mode for better navigation display */
+.activity-graph-embed .calendar-month-card {
+    min-width: 280px;
+    max-width: 320px;
+}
+
+.calendar-month-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-normal);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.calendar-month-title {
+    flex: 1;
+    text-align: center;
+    min-width: 140px;
+}
+
+.calendar-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: var(--background-primary);
+    color: var(--text-normal);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    flex-shrink: 0;
+}
+
+.calendar-nav-btn:hover:not(:disabled) {
+    background: var(--background-modifier-hover);
+    color: var(--interactive-accent);
+}
+
+.calendar-nav-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.calendar-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.calendar-day-names {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 6px;
+}
+
+.calendar-day-name {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    min-width: 26px;
+    min-height: 26px;
+}
+
+.calendar-day:hover:not(.empty):not(.out-of-range) {
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+.calendar-day:active:not(.empty):not(.out-of-range) {
+    transform: scale(0.95);
+}
+
+.calendar-day.empty {
+    background: transparent;
+    cursor: default;
+}
+
+.calendar-day.out-of-range {
+    background: transparent;
+    color: var(--text-faint);
+    cursor: default;
+    opacity: 0.3;
+}
+
+/* Today Highlight - Calendar */
+.calendar-day.today {
+    outline: 2px solid;
+    outline-offset: -2px;
+    font-weight: bold;
+}
+
+/* Calendar Activity Levels - Light Theme */
+.theme-light .calendar-day.level-0 {
+    background-color: var(--activity-light-level-0, #ebedf0);
+    color: var(--text-muted);
+}
+
+.theme-light .calendar-day.level-1 {
+    background-color: var(--activity-light-level-1, #9be9a8);
+    color: #1a3d1a;
+}
+
+.theme-light .calendar-day.level-2 {
+    background-color: var(--activity-light-level-2, #40c463);
+    color: #fff;
+}
+
+.theme-light .calendar-day.level-3 {
+    background-color: var(--activity-light-level-3, #30a14e);
+    color: #fff;
+}
+
+.theme-light .calendar-day.level-4 {
+    background-color: var(--activity-light-level-4, #216e39);
+    color: #fff;
+}
+
+/* Calendar Activity Levels - Dark Theme */
+.theme-dark .calendar-day.level-0 {
+    background-color: var(--activity-dark-level-0, #161b22);
+    color: var(--text-muted);
+}
+
+.theme-dark .calendar-day.level-1 {
+    background-color: var(--activity-dark-level-1, #0e4429);
+    color: #9be9a8;
+}
+
+.theme-dark .calendar-day.level-2 {
+    background-color: var(--activity-dark-level-2, #006d32);
+    color: #fff;
+}
+
+.theme-dark .calendar-day.level-3 {
+    background-color: var(--activity-dark-level-3, #26a641);
+    color: #fff;
+}
+
+.theme-dark .calendar-day.level-4 {
+    background-color: var(--activity-dark-level-4, #39d353);
+    color: #0d1117;
+}
+
+/* Calendar Legend */
+.calendar-legend {
+    margin-top: 20px;
+}
+
+
+/* === calendar-sheet.css === */
+/* 
+   Calendar Sheet Styles - Single month view with navigation
+*/
+
+.calendar-sheet-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Navigation */
+.calendar-sheet-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 8px;
+    margin-bottom: 8px;
+}
+
+.calendar-sheet-nav-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+.calendar-sheet-nav-btn {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text-muted);
+    font-size: 32px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-weight: 300;
+}
+
+.calendar-sheet-nav-btn:hover {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-normal);
+}
+
+.calendar-sheet-nav-btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.calendar-sheet-nav-btn:active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.calendar-sheet-nav-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.calendar-sheet-nav-btn.disabled:hover {
+    background: transparent !important;
+    color: var(--text-muted);
+}
+
+/* Calendar grid */
+.calendar-sheet-month {
+    width: 100%;
+}
+
+.calendar-sheet-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* Day headers */
+.calendar-sheet-day-header {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 8px 4px;
+    text-transform: uppercase;
+}
+
+/* Day cells */
+.calendar-sheet-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 40px;
+}
+
+.calendar-sheet-day:not(.empty):hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.calendar-sheet-day.empty {
+    cursor: default;
+}
+
+/* Day number */
+.calendar-sheet-day-number {
+    font-size: 13px;
+    color: var(--text-normal);
+    line-height: 1;
+    z-index: 2;
+    position: relative;
+}
+
+/* Light text for light theme high activity levels (dark green needs light text) */
+.theme-light .calendar-sheet-day .calendar-sheet-day-number.dark-text {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Dark text for dark theme high activity levels (bright green needs dark text) */
+.theme-dark .calendar-sheet-day .calendar-sheet-day-number.dark-text {
+    color: #000000 !important;
+    font-weight: 600 !important;
+}
+
+.calendar-sheet-day.out-of-range .calendar-sheet-day-number {
+    color: var(--text-faint);
+}
+
+/* Activity dot - default center position behind day number */
+.calendar-sheet-dot {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Center position - large circle behind number */
+.calendar-sheet-dot.position-center {
+    width: 26px;
+    height: 26px;
+}
+
+/* Corner positions - smaller dots */
+.calendar-sheet-dot.position-top-left,
+.calendar-sheet-dot.position-top-right,
+.calendar-sheet-dot.position-bottom-left,
+.calendar-sheet-dot.position-bottom-right {
+    width: 6px;
+    height: 6px;
+}
+
+.calendar-sheet-dot.position-top-left {
+    top: 4px;
+    left: 4px;
+}
+
+.calendar-sheet-dot.position-top-right {
+    top: 4px;
+    right: 4px;
+}
+
+.calendar-sheet-dot.position-bottom-left {
+    bottom: 4px;
+    left: 4px;
+}
+
+.calendar-sheet-dot.position-bottom-right {
+    bottom: 4px;
+    right: 4px;
+}
+
+/* Activity levels using CSS variables */
+.theme-light .calendar-sheet-dot.level-1 {
+    background-color: var(--activity-light-level-1);
+}
+
+.theme-light .calendar-sheet-dot.level-2 {
+    background-color: var(--activity-light-level-2);
+}
+
+.theme-light .calendar-sheet-dot.level-3 {
+    background-color: var(--activity-light-level-3);
+}
+
+.theme-light .calendar-sheet-dot.level-4 {
+    background-color: var(--activity-light-level-4);
+}
+
+.theme-dark .calendar-sheet-dot.level-1 {
+    background-color: var(--activity-dark-level-1);
+}
+
+.theme-dark .calendar-sheet-dot.level-2 {
+    background-color: var(--activity-dark-level-2);
+}
+
+.theme-dark .calendar-sheet-dot.level-3 {
+    background-color: var(--activity-dark-level-3);
+}
+
+.theme-dark .calendar-sheet-dot.level-4 {
+    background-color: var(--activity-dark-level-4);
+}
+
+/* Today highlight - light background with border */
+.calendar-sheet-day.today {
+    background-color: var(--background-modifier-hover);
+    border: 2px solid var(--interactive-accent);
+}
+
+.calendar-sheet-day.today .calendar-sheet-day-number {
+    font-weight: 600;
+}
+
+.calendar-sheet-day.today:hover {
+    background-color: var(--background-modifier-hover-active);
+}
+
+/* Task status dots */
+.calendar-sheet-task-dots {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.calendar-sheet-task-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.calendar-sheet-task-dot.filled {
+    background-color: var(--text-accent);
+}
+
+.calendar-sheet-task-dot.empty {
+    background-color: transparent;
+    border: 1px solid var(--text-accent);
+}
+
+
+/* === legend-tooltip.css === */
+/* ===================================
+   Legend & Tooltip Styles
+   =================================== */
+
+/* Legend */
+.graph-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 15px;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.legend-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 0 4px;
+}
+
+/* Tooltip */
+.activity-tooltip {
+    position: fixed;
+    background: var(--background-secondary);
+    color: var(--text-normal);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--background-modifier-border);
+    white-space: nowrap;
+}
+
+
+/* === settings.css === */
+/* ===================================
+   Settings Panel Styles
+   =================================== */
+
+/* Settings Styles */
+.activity-graph-settings h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+/* Collapsible Colors Section */
+.activity-colors-section {
+    margin-top: 20px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 0;
+}
+
+.activity-colors-header {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal);
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.activity-colors-header:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.activity-colors-section[open] .activity-colors-header {
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.activity-colors-section[open] {
+    padding-bottom: 10px;
+}
+
+.activity-colors-section .setting-item {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.activity-colors-subheader {
+    margin-top: 15px !important;
+    margin-bottom: 8px !important;
+    margin-left: 16px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+}
+
+.setting-item-description {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* Date input styling */
+input.activity-date-input {
+    font-family: var(--font-monospace);
+    width: 150px;
+    padding: 6px 10px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background-color: var(--background-primary);
+    color: var(--text-normal);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+input.activity-date-input:hover {
+    border-color: var(--interactive-accent);
+}
+
+input.activity-date-input:focus {
+    outline: none;
+    border-color: var(--interactive-accent);
+    box-shadow: 0 0 0 2px rgba(var(--interactive-accent-rgb), 0.2);
+}
+
+/* Dark theme adjustments for date picker */
+.theme-dark input.activity-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+
