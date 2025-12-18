@@ -139,16 +139,16 @@ export default class ActivityGraphPlugin extends Plugin {
         workspace.revealLeaf(leaf);
     }
 
-    updateView() {
+    updateView(): void {
         const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_ACTIVITY_GRAPH);
         leaves.forEach(leaf => {
             if (leaf.view instanceof ActivityGraphView) {
-                void leaf.view.onOpen();
+                leaf.view.onOpen().catch(console.error);
             }
         });
     }
 
-    async onunload() {
-        await this.saveActivityData();
+    onunload(): void {
+        this.saveActivityData().catch(console.error);
     }
 }

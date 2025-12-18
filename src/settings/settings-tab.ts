@@ -18,25 +18,25 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
         this.plugin = plugin;
     }
     
-    private async updatePathPreview(): Promise<void> {
+    private updatePathPreview(): void {
         if (this.pathPreviewSpan) {
             const previewPath = getDailyNotePath(this.app, this.plugin.settings);
             this.pathPreviewSpan.setText(previewPath);
         }
     }
     
-    private async updateFormatPreview(): Promise<void> {
+    private updateFormatPreview(): void {
         if (this.formatPreviewSpan) {
             const previewPath = getDailyNotePath(this.app, this.plugin.settings);
             this.formatPreviewSpan.setText(previewPath);
         }
     }
 
-    display() {
+    display(): void {
         void this.renderSettings();
     }
 
-    private async renderSettings() {
+    private renderSettings(): void {
         const { containerEl } = this;
         containerEl.empty();
 
@@ -173,7 +173,7 @@ export class ActivityGraphSettingTab extends PluginSettingTab {
                 .setName(ts('settingCustomDailyNotesPath'))
                 .setDesc(ts('settingCustomDailyNotesPathDesc'))
                 .addText(text => text
-                    .setPlaceholder('Daily Notes')
+                    .setPlaceholder('Daily notes')
                     .setValue(this.plugin.settings.customDailyNotesPath)
                     .onChange(async (value) => {
                         this.plugin.settings.customDailyNotesPath = value;

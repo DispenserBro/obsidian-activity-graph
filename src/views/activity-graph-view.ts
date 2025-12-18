@@ -112,10 +112,11 @@ export class ActivityGraphView extends ItemView {
         }
     }
 
-    async onClose(): Promise<void> {
+    onClose(): Promise<void> {
         // Cleanup renderers
         this.commitGraphRenderer.cleanup();
         this.calendarRenderer.cleanup();
         this.calendarSheetRenderer.cleanup();
+        return Promise.resolve();
     }
 }
