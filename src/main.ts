@@ -136,7 +136,7 @@ export default class ActivityGraphPlugin extends Plugin {
             });
         }
         
-        workspace.revealLeaf(leaf);
+        await workspace.revealLeaf(leaf);
     }
 
     updateView(): void {
